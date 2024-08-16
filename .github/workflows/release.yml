@@ -69,7 +69,7 @@ jobs:
          # Ping the server
          jf rt ping  
      - name: Upload artifact to staging
-       run: jfrog rt bpr Staging --build-number=${{github.run_number}} --source-repo=python-test-pypi-local --target-repo=githubjfrog-prod
+       run: jfrog rt bpr Staging --build-number=${{github.run_number}} --source-repo=python-test-pypi-local githubjfrog-prod
      
 
      
