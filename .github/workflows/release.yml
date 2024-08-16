@@ -64,8 +64,12 @@ jobs:
          JF_PROJECT: "githubjfrog"
          JF_URL: ${{ secrets.JF_URL }}
          JF_ACCESS_TOKEN: ${{ secrets.JF_ACCESS_TOKEN }}
+     - name: Test Connection
+       run: |
+         # Ping the server
+         jf rt ping  
      - name: Upload artifact to staging
-       run: jfrog rt build-promote Staging --build-number=${{github.run_number}} --status=production --source-repo=python-test-pypi-local --target-repo=githubjfrog-prod
+       run: jfrog rt bpr Staging --build-number=${{github.run_number}} --source-repo=python-test-pypi-local --target-repo=githubjfrog-prod
      
 
      
