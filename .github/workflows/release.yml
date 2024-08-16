@@ -20,7 +20,7 @@ jobs:
      - name: Build release distributions
        run: python -m build
      - name: upload build artifacts
-       run: ls -la
+       run: ls -la dist/
      
 
 
