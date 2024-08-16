@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
      - name: Repsoitory checkout
-       uses: actions/checkout@v3
+       uses: actions/checkout@v4
      - name: Python Setup
        uses: actions@setup-python@v4
        with:
@@ -20,7 +20,6 @@ jobs:
        run: pytest
      - name: upload build artifacts
        run: ls -la
-        
 
 
 
