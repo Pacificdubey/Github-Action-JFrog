@@ -36,7 +36,7 @@ jobs:
      - name: Setup JFrog CLI
        uses: jfrog/setup-jfrog-cli@v4
        with:
-         version: '2.x.x'
+         version: '2.62.2'
        env:
          JF_PROJECT: "githubjfrog"
          JF_URL: ${{ vars.JF_URL }}
