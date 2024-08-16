@@ -2,6 +2,9 @@ name: JFrog Integration with Github Actions
 on: [push]
   # release:
     # types: [published]
+env:
+  BUILD_NAME: Staging
+  BUILD_NUMBER: ${{github.run_number}}
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -48,9 +51,9 @@ jobs:
          jf rt ping
      - name: Upload artifact to staging
        run: |
-        jfrog rt upload *.whl python-test-pypi-local/ --build-name=Staging --build-number=${{github.run_number}}
+        jfrog rt upload *.whl python-test-pypi-local/ --build-name=$BUILD_NAME --build-number=$BUILD_NUMBER
         # jfrog rt build-collect-env Staging ${{github.run_number}}
-        jfrog rt build-publish --build-name=Staging --build-number=${{github.run_number}}
+        jfrog rt build-publish --build-name=$BUILD_NAME --build-number=$BUILD_NUMBER
   deploy:
     needs: [build,deploy-test]
     runs-on: ubuntu-latest
