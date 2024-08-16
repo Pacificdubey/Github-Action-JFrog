@@ -72,7 +72,7 @@ jobs:
          # Ping the server
          jf rt ping  
      - name: Upload artifact to staging
-       run: jfrog rt build-promote $BUILD_NAME $BUILD_NUMBER --target-repo=githubjfrog-prod
+       run: jfrog rt build-promote $BUILD_NAME $BUILD_NUMBER --target-repo=githubjfrog-prod/
      
 
      
