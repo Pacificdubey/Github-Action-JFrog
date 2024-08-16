@@ -25,6 +25,28 @@ jobs:
         name: dist
         path: dist/
 
+  deploy-test:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+     - name: Download Build Artifcats
+       uses: actions/download-artifact@v4
+       with:
+        name: dist
+     - name: Setup JFrog CLI
+       uses: jfrog/setup-jfrog-cli@v4
+       with:
+         version: '2.x.x'
+       env:
+         JF_PROJECT: "githubjfrog"
+         JF_URL: ${{ vars.JF_URL }}
+         JF_ACCESS_TOKEN: ${{ secrets.JF_ACCESS_TOKEN }}
+         
+     - name: Upload artifact to staging
+       run: |
+         # Ping the server
+         jf rt ping
+     
 
      
 
