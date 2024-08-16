@@ -54,6 +54,14 @@ jobs:
     runs-on: ubuntu-latest
     environment: Prod
     steps:
+     - name: Setup JFrog CLI
+       uses: jfrog/setup-jfrog-cli@v4
+       with:
+         version: '2.62.2'
+       env:
+         JF_PROJECT: "githubjfrog"
+         JF_URL: ${{ secrets.JF_URL }}
+         JF_ACCESS_TOKEN: ${{ secrets.JF_ACCESS_TOKEN }}
      - name: Upload artifact to staging
        run: jfrog rt build-promote -build-name=Staging --build-number=${{github.run_number}} --status=production --source-repo=python-test-pypi-local --target-repo=githubjfrog-prod
      
