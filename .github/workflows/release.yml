@@ -19,7 +19,7 @@ jobs:
      - name: upload build artifacts
        run: ls -la
      - name: Run Tests
-       run: pytest
+       run: pytest test.py
      
 
 
