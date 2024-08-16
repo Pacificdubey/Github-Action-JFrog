@@ -47,7 +47,7 @@ jobs:
          # Ping the server
          jf rt ping
      - name: Upload artifact to staging
-       run: ls -la    # jfrog rt upload "dist/*.whl" python-test-pypi-local/ -build-name=Staging --build-number=${{github.run_number}}
+       run: jfrog rt upload "*.whl" python-test-pypi-local/ -build-name=Staging --build-number=${{github.run_number}}
          
      
 
