@@ -73,9 +73,8 @@ jobs:
          jf rt ping  
      - name: Upload artifact to staging
        run: |
-         jfrog rt curl /api/repositories 
          jfrog rt build-publish $BUILD_NAME $BUILD_NUMBER
-         jfrog rt build-promote $BUILD_NAME $BUILD_NUMBER --target-repo=githubjfrog-prod
+         jfrog rt build-promote $BUILD_NAME $BUILD_NUMBER
      
 
      
