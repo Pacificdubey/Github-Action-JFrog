@@ -23,6 +23,16 @@ jobs:
         with:
           oidc-provider-name: github
           oidc-audience: my-aud
+      - name: Generate Docker authentication using OIDC token
+        run: |
+          export JFROG_TOKEN=$(jfrog rt curl -XPOST "/api/security/token" \
+          --data '{
+             "audience": "api://default",
+             "grant_type": "client_credentials",
+             "client_id": "GitHubActions"
+              }' | jq -r '.access_token')
+          echo $JFROG_TOKEN | docker login ${{ secrets.JFROG_URL }} --username _ --password-stdin
+
       - name: Build Docker image
         run: |
           docker images
@@ -30,7 +40,6 @@ jobs:
       - name: Push Docker image to staging repository
         run: |
           docker push pacificdubey.jfrog.io/dockerkey-docker-dev-local/myapp:${RUN_NUMBER}   
-
 
 
 
