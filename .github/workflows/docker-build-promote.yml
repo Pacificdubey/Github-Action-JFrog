@@ -23,5 +23,6 @@ jobs:
           oidc-audience: my-aud
       - name: Build Docker image
         run: |
-          docker build -t ${{ secrets.JFROG_URL }}/dockerkey-docker-dev-local/my-app:${{ github.run_number }} . 
+          docker images
+          ls -la
         
