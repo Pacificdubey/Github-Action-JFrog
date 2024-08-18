@@ -12,6 +12,9 @@ jobs:
     steps:
       - name: JFrog Setup
         uses: jfrog/setup-jfrog-cli@v4.2.2
+        env:
+          JF_URL: ${{ secrets.JF_URL }}
         with:
           oidc-provider-name: github
           oidc-audience: my-aud
+        
