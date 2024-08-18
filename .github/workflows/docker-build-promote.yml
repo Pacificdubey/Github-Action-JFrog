@@ -3,6 +3,8 @@ on:
   push:
     branches:
       - main
+env:
+  RUN_NUMBER: ${{ github.run_number }}
 permissions:
   id-token: write
   contents: read 
@@ -24,7 +26,6 @@ jobs:
       - name: Build Docker image
         run: |
           docker images
-          RUN_NUMBER=${{ github.run_number }}
           docker build -t pacificdubey.jfrog.io/dockerkey-docker-dev-local/myapp:${RUN_NUMBER} .
       - name: Push Docker image to staging repository
         run: |
