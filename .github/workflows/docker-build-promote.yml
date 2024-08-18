@@ -25,5 +25,5 @@ jobs:
         run: |
           docker images
           RUN_NUMBER=${{ github.run_number }}
-          # docker build -t pacificdubey.jfrog.io/dockerkey-docker-dev-local/myapp:${RUN_NUMBER} .
+          docker build -t pacificdubey.jfrog.io/dockerkey-docker-dev-local/myapp:${RUN_NUMBER} .
            
