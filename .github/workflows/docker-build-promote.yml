@@ -24,6 +24,7 @@ jobs:
       - name: Build Docker image
         run: |
           docker images
-          echo ${{github.build_number}}
+          RUN_NUMBER=${{ github.run_number }}
+          echo $RUN_NUMBER
           # docker build -t pacificdubey.jfrog.io/dockerkey-docker-dev-local/myapp:latest .
-        
+           
