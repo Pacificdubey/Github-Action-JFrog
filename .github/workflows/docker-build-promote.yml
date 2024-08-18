@@ -1,0 +1,17 @@
+name: jFrog Docker Integration
+
+on:
+  push:
+    branches:
+      - main
+permissions:
+  id-token: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: JFrog Setup
+        uses: jfrog/setup-jfrog-cli@v4.2.2
+        with:
+          oidc-provider-name: github
+          oidc-audience: my-aud
