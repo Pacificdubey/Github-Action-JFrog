@@ -30,8 +30,13 @@ jobs:
          registry: ${{ secrets.JF_URL }}
          username: ${{ steps.setup-cli.outputs.oidc-user }}
          password: ${{ steps.setup-cli.outputs.oidc-token }}
-
-
+      - name: Build Docker image
+        run: |
+          docker images
+          docker build -t pacificdubey.jfrog.io/dockerkey-docker-dev-local/myapp:${RUN_NUMBER} .
+      - name: Push Docker image to staging repository
+        run: |
+          docker push pacificdubey.jfrog.io/dockerkey-docker-dev-local/myapp:${RUN_NUMBER}  
 
 
 
