@@ -47,6 +47,7 @@ jobs:
       - name: Get Docker image digest
         id: get-digest
         run: |
+          IMAGE_TAG="pacificdubey.jfrog.io/dockerkey-docker-dev-local/myapp:${RUN_NUMBER}"
           DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' "$IMAGE_TAG")
           echo "DIGEST=$DIGEST" >> $GITHUB_ENV
     # docker xray scanning   
