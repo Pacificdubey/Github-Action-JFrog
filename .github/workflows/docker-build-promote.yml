@@ -37,18 +37,23 @@ jobs:
       - name: Push Docker image to staging repository
         run: |
          docker push pacificdubey.jfrog.io/dockerkey-docker-dev-local/myapp:${RUN_NUMBER}  
-      - name: Publish build info to JFrog
-        run: |
-          RUN_NUMBER=${{ github.run_number }}
-          IMAGE_TAG="pacificdubey.jfrog.io/dockerkey-docker-dev-local/myapp:${RUN_NUMBER}"
-          TARGET_REPO="dockerkey-docker-dev-local"
-          jfrog  rt docker-push "$IMAGE_TAG" "$TARGET_REPO" --build-name=my-docker-build --build-number=$RUN_NUMBER
-          jfrog rt build-publish my-docker-build $RUN_NUMBER --project=dockerkey 
+     # - name: Publish build info to JFrog
+       # run: |
+        #  RUN_NUMBER=${{ github.run_number }}
+         # IMAGE_TAG="pacificdubey.jfrog.io/dockerkey-docker-dev-local/myapp:${RUN_NUMBER}"
+          #TARGET_REPO="dockerkey-docker-dev-local"
+          #jfrog  rt docker-push "$IMAGE_TAG" "$TARGET_REPO" --build-name=my-docker-build --build-number=$RUN_NUMBER
+          #jfrog rt build-publish my-docker-build $RUN_NUMBER --project=dockerkey 
     # docker xray scanning   
       - name: docker scan
         run: |  
          jf docker pull pacificdubey.jfrog.io/dockerkey-docker-dev-local/myapp:${RUN_NUMBER}
          jf docker scan pacificdubey.jfrog.io/dockerkey-docker-dev-local/myapp:${RUN_NUMBER}
+    # adding the built docker into the JFrog build info
+      - name: add docker package to build
+        run: |  
+         echo "pacificdubey.jfrog.io/dockerkey-docker-dev-local/myapp:${RUN_NUMBER}" > metadata.json
+         jf rt build-docker-create dockerkey-docker-dev-local --image-file metadata.json
 
 
 
