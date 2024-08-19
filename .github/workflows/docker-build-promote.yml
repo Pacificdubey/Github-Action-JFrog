@@ -44,6 +44,11 @@ jobs:
           #TARGET_REPO="dockerkey-docker-dev-local"
           #jfrog  rt docker-push "$IMAGE_TAG" "$TARGET_REPO" --build-name=my-docker-build --build-number=$RUN_NUMBER
           #jfrog rt build-publish my-docker-build $RUN_NUMBER --project=dockerkey 
+      - name: Get Docker image digest
+        id: get-digest
+        run: |
+          DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' "$IMAGE_TAG")
+          echo "DIGEST=$DIGEST" >> $GITHUB_ENV
     # docker xray scanning   
       - name: docker scan
         run: |  
@@ -52,7 +57,7 @@ jobs:
     # adding the built docker into the JFrog build info
       - name: add docker package to build
         run: |  
-         echo "pacificdubey.jfrog.io/dockerkey-docker-dev-local/myapp:${RUN_NUMBER}" > metadata.json
+         echo "pacificdubey.jfrog.io/dockerkey-docker-dev-local/myapp:${RUN_NUMBER}@${{ env.DIGEST }}" > metadata.json
          jf rt build-docker-create dockerkey-docker-dev-local --image-file metadata.json
 
 
