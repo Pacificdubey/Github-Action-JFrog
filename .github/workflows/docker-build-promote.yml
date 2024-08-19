@@ -48,7 +48,7 @@ jobs:
         id: get-digest
         run: |
           IMAGE_TAG="pacificdubey.jfrog.io/dockerkey-docker-dev-local/myapp:${RUN_NUMBER}"
-          DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' "$IMAGE_TAG")
+          DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' "$IMAGE_TAG" | cut -d '@' -f 2)
           echo "DIGEST=$DIGEST" >> $GITHUB_ENV
     # docker xray scanning   
       - name: docker scan
@@ -60,6 +60,7 @@ jobs:
         run: |  
          echo "pacificdubey.jfrog.io/dockerkey-docker-dev-local/myapp:${RUN_NUMBER}@${{ env.DIGEST }}" > metadata.json
          jf rt build-docker-create dockerkey-docker-dev-local --image-file metadata.json
+         IMAGE_TAG="pacificdubey.jfrog.io/dockerkey-docker-dev-local/myapp:${RUN_NUMBER}"
 
 
 
