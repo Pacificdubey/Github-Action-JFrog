@@ -47,8 +47,8 @@ jobs:
     # docker xray scanning   
       - name: docker scan
         run: |  
-         #  jf docker pull ${{ vars.JF_URL }}/dockerkey-docker-dev-local/myapp:${RUN_NUMBER}
-          jf docker scan ${{ vars.JF_URL }}/dockerkey-docker-dev-local/myapp:${RUN_NUMBER}
+         jf docker pull pacificdubey.jfrog.io/dockerkey-docker-dev-local/myapp:${RUN_NUMBER}
+         jf docker scan pacificdubey.jfrog.io/dockerkey-docker-dev-local/myapp:${RUN_NUMBER}
 
 
 
