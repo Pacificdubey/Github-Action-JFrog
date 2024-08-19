@@ -43,8 +43,19 @@ jobs:
           IMAGE_TAG="pacificdubey.jfrog.io/dockerkey-docker-dev-local/myapp:${RUN_NUMBER}"
           TARGET_REPO="dockerkey-docker-dev-local"
           jfrog  rt docker-push "$IMAGE_TAG" "$TARGET_REPO" --build-name=my-docker-build --build-number=$RUN_NUMBER
-          # jfrog rt build-publish my-docker-build $RUN_NUMBER --project=dockerkey
           jfrog rt build-publish my-docker-build $RUN_NUMBER --project=dockerkey 
+    # docker xray scanning   
+      - name: docker scan
+        run: |  
+         #  jf docker pull ${{ vars.JF_URL }}/dockerkey-docker-dev-local/myapp:${RUN_NUMBER}
+          jf docker scan ${{ vars.JF_URL }}/dockerkey-docker-dev-local/myapp:${RUN_NUMBER}
+
+
+
+
+
+
+          
 
 
 
