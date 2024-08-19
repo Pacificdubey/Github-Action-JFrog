@@ -34,16 +34,16 @@ jobs:
         run: |
           docker images
           docker build -t pacificdubey.jfrog.io/dockerkey-docker-dev-local/myapp:${RUN_NUMBER} .
-      - name: Push Docker image to staging repository
-        run: |
-          docker push pacificdubey.jfrog.io/dockerkey-docker-dev-local/myapp:${RUN_NUMBER}  
+      #- name: Push Docker image to staging repository
+       # run: |
+       #   docker push pacificdubey.jfrog.io/dockerkey-docker-dev-local/myapp:${RUN_NUMBER}  
       - name: Publish build info to JFrog
         run: |
           RUN_NUMBER=${{ github.run_number }}
           IMAGE_TAG="pacificdubey.jfrog.io/dockerkey-docker-dev-local/myapp:${RUN_NUMBER}"
           TARGET_REPO="dockerkey-docker-dev-local"
           jfrog  rt docker-push "$IMAGE_TAG" "$TARGET_REPO" --build-name=my-docker-build --build-number=$RUN_NUMBER
-          jfrog rt build-publish my-docker-build $RUN_NUMBER
+          jfrog rt build-publish my-docker-build $RUN_NUMBER --project=dockerkey
 
 
 
