@@ -42,7 +42,7 @@ jobs:
           RUN_NUMBER=${{ github.run_number }}
           IMAGE_TAG="pacificdubey.jfrog.io/dockerkey-docker-dev-local/myapp:${RUN_NUMBER}"
           TARGET_REPO="dockerkey-docker-dev-local"
-          jfrog  docker-push "$IMAGE_TAG" "$TARGET_REPO" --build-name=my-docker-build --build-number=$RUN_NUMBER
+          jfrog  rt docker-push "$IMAGE_TAG" "$TARGET_REPO" --build-name=my-docker-build --build-number=$RUN_NUMBER
           # jfrog rt build-publish my-docker-build $RUN_NUMBER
 
 
