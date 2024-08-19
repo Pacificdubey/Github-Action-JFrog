@@ -66,7 +66,7 @@ jobs:
         run: |
          jf rt build-collect-env my-docker-build ${{ github.run_number }}  --project=dockerkey  # Collect environment variables
          jf rt build-publish my-docker-build ${{ github.run_number }} --project=dockerkey    # Publish build info
-         jf build-scan my-docker-build ${{ github.run_number }}
+         jf build-scan my-docker-build ${{ github.run_number }} --project=dockerkey
 
 
 
