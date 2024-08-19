@@ -64,7 +64,7 @@ jobs:
     # publishing and scanning a build info for the build
       - name: publish build info
         run: |
-         jf rt build-collect-env --build-name=my-docker-build --build-number=${{ github.run_number }}    # Collect environment variables
+         jf rt build-collect-env my-docker-build ${{ github.run_number }}  --project=dockerkey  # Collect environment variables
          jf rt build-publish my-docker-build ${{ github.run_number }} --project=dockerkey    # Publish build info
          jf build-scan my-docker-build ${{ github.run_number }}
 
