@@ -24,7 +24,7 @@ jobs:
         id: setup-cli
         uses: jfrog/setup-jfrog-cli@v4.2.2
         env:
-          JF_URL: ${{ secrets.JF_URL }} # This should be the base URL of your Artifactory
+          JF_URL: ${{ vars.JF_URL }} # This should be the base URL of your Artifactory
         with:
           oidc-provider-name: githubtest
           oidc-audience: aud
@@ -45,5 +45,10 @@ jobs:
       - name: Xray Scan and Publish Build Info
         run: |
          # Collect and publish the build info
+         jf rt build-publish
          jfrog rt build-collect-env "Maven CI/CD" ${{ github.run_number }}
          jfrog rt build-publish "Maven CI/CD" ${{ github.run_number }}
+         # Run an Xray scan on the published build
+         jfrog rt build-scan "Maven CI/CD" ${{ github.run_number }}
+         # Output the Xray scan results and build info
+         jfrog rt build-report "Maven CI/CD" ${{ github.run_number }}
