@@ -52,7 +52,7 @@ jobs:
        run: |
          # Ping the server
          jf rt ping
-     - name: Upload artifact to staging env
+     - name: Upload artifact to staging 
        run: |
         jfrog rt upload *.whl python-test-pypi-local/ --build-name=$BUILD_NAME --build-number=$BUILD_NUMBER --detailed-summary
         jfrog rt build-collect-env
