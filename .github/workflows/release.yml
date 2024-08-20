@@ -1,4 +1,4 @@
-name: JFrog Integration with Github Actions
+name: Maven CI/CD
 on: [push]
  # release:
   #  types: [published]
