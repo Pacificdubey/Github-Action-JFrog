@@ -2,7 +2,7 @@ name: jFrog Docker Integration
 on:
   push:
     branches:
-      - main
+      - feature/test
 env:
   RUN_NUMBER: ${{ github.run_number }}
 permissions:
