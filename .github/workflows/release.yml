@@ -1,4 +1,4 @@
-name: Maven CI/CD
+name: Build and Test Python
 on: [push]
  # release:
   #  types: [published]
