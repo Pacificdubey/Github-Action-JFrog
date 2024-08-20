@@ -5,6 +5,8 @@ on: [push]
 env:
   BUILD_NAME: Staging
   BUILD_NUMBER: ${{github.run_number}}
+permissions:
+    id-token: write
 jobs:
   build:
     runs-on: ubuntu-latest
