@@ -1,4 +1,4 @@
-name: Build and Test Python Code
+name: Build and Test Python
 on: [push]
  # release:
   #  types: [published]
