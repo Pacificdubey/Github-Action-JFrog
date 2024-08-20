@@ -37,14 +37,14 @@ jobs:
        uses: actions/download-artifact@v4
        with:
         name: dist
-     - name: Setup JFrog CLI
-       uses: jfrog/setup-jfrog-cli@v4
-       with:
-         version: '2.62.2'
+     - name: JFrog Setup
+       id: setup-cli
+       uses: jfrog/setup-jfrog-cli@v4.2.2
        env:
-         JF_PROJECT: "githubjfrog"
-         JF_URL: ${{ secrets.JF_URL }}
-         JF_ACCESS_TOKEN: ${{ secrets.JF_ACCESS_TOKEN }}
+          JF_URL: ${{ vars.JF_URL }}
+       with:
+          oidc-provider-name: github
+          oidc-audience: my-aud
          
      - name: Test Connection
        run: |
