@@ -23,7 +23,7 @@ jobs:
           JF_URL: ${{ vars.JF_URL }}
         with:
           oidc-provider-name: github
-          # oidc-audience: my-aud
+          oidc-audience: my-aud
       - name: Authenticate Docker
         uses: docker/login-action@v3
         with:
