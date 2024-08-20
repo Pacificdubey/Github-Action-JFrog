@@ -45,10 +45,14 @@ jobs:
       - name: Xray Scan and Publish Build Info
         run: |
          # Collect and publish the build info
-         jf rt build-publish
-         jfrog rt build-collect-env "Maven CI/CD" ${{ github.run_number }}
-         jfrog rt build-publish "Maven CI/CD" ${{ github.run_number }}
+          jfrog rt build-collect-env "Maven CI/CD" ${{ github.run_number }}
+          jfrog rt build-publish "Maven CI/CD" ${{ github.run_number }}
          # Run an Xray scan on the published build
-         jfrog rt build-scan "Maven CI/CD" ${{ github.run_number }}
-         # Output the Xray scan results and build info
-         jfrog rt build-report "Maven CI/CD" ${{ github.run_number }}
+          jfrog build-scan "Maven CI/CD" ${{ github.run_number }}
+          # Output the Xray scan results
+          jfrog rt build-publish "Maven CI/CD" ${{ github.run_number }}
+
+     #- name: Display Xray Scan Results
+     #  run: |
+      #  echo "Xray Scan Completed with Summary:"
+      #  cat /home/runner/.jfrog/xray/reports/Maven\ CI_CD-${{ github.run_number }}.json
