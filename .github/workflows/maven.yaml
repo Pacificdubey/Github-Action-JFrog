@@ -1,0 +1,41 @@
+name: Maven CI/CD
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up JDK 11
+        uses: actions/setup-java@v3
+        with:
+          java-version: '11'
+          distribution: 'adopt'
+
+      - name: JFrog Setup
+        id: setup-cli
+        uses: jfrog/setup-jfrog-cli@v4.2.2
+        env:
+          JF_URL: ${{ secrets.JF_URL }} # This should be the base URL of your Artifactory
+        with:
+          oidc-provider-name: githubtest
+          oidc-audience: aud
+
+      - name: Build with Maven
+        run: mvn clean install
+
+      - name: Publish to JFrog Artifactory
+        run: |
+          jfrog rt mvn "deploy" \
+            --url="${{ secrets.JF_URL }}" \
+            --repo-release="maventest-libs-release-local" \
+            --repo-snapshot="maventest-libs-snapshot-local"
+            --repo-snapshot="maventest-libs-snapshot-local"
