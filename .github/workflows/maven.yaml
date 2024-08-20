@@ -52,7 +52,7 @@ jobs:
           # Output the Xray scan results
           jfrog rt build-publish "Maven CI/CD" ${{ github.run_number }}
 
-     #- name: Display Xray Scan Results
-     #  run: |
-      #  echo "Xray Scan Completed with Summary:"
-      #  cat /home/runner/.jfrog/xray/reports/Maven\ CI_CD-${{ github.run_number }}.json
+      - name: Display Xray Scan Results
+        run: |
+         echo "Xray Scan Completed with Summary:"
+         cat /home/runner/.jfrog/xray/reports/Maven\ CI_CD-${{ github.run_number }}.json
