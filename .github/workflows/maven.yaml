@@ -36,7 +36,6 @@ jobs:
          jfrog rt mvn-config \
          --repo-deploy-releases=maventest-libs-release-local \
          --repo-deploy-snapshots=maventest-libs-snapshot-local
-
       - name: Publish to JFrog Artifactory
         run: |
            jfrog rt mvn deploy \
@@ -45,9 +44,7 @@ jobs:
       - name: Xray Scan and Publish Build Info
         run: |
          # Collect and publish the build info
-          jfrog rt build-collect-env "Maven CI/CD" ${{ github.run_number }}
-          jfrog rt build-publish "Maven CI/CD" ${{ github.run_number }}
+         jfrog rt build-collect-env "Maven CI/CD" ${{ github.run_number }}
+         jfrog rt build-publish "Maven CI/CD" ${{ github.run_number }}
          # Run an Xray scan on the published build
-          jfrog build-scan "Maven CI/CD" ${{ github.run_number }}
-      - name: Display Xray Scan Results
-         cat /home/runner/.jfrog/xray/reports/Maven\ CI_CD-${{ github.run_number }}.json
+         jfrog build-scan "Maven CI/CD" ${{ github.run_number }}
