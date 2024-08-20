@@ -34,13 +34,11 @@ jobs:
       - name: JFrog Maven Config
         run: |
          jfrog rt mvn-config \
-         --repo-release=maventest-libs-release-local \
-         --repo-snapshot=maventest-libs-snapshot-local
+         --repo-deploy-releases=maventest-libs-release-local \
+         --repo-deploy-snapshots=maventest-libs-snapshot-local
 
       - name: Publish to JFrog Artifactory
         run: |
-          jfrog rt mvn "deploy" \
-            --url="${{ secrets.JF_URL }}" \
-            --repo-release="maventest-libs-release-local" \
-            --repo-snapshot="maventest-libs-snapshot-local"
-            --repo-snapshot="maventest-libs-snapshot-local"
+           jfrog rt mvn deploy \
+            --build-name="Maven CI/CD" \
+            --build-number=${{ github.run_number }}
