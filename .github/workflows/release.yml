@@ -31,7 +31,7 @@ jobs:
   deploy-test:
     needs: build
     runs-on: ubuntu-latest
-    environment: Prod
+   # environment: Prod
     steps:
      - name: Download Build Artifcats
        uses: actions/download-artifact@v4
