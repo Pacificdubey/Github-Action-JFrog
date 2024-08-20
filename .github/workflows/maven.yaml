@@ -44,6 +44,6 @@ jobs:
       # publishing and scanning a build info for the build
       - name: publish build info
         run: |
-         jf rt build-collect-env      # Collect environment variables
-         jf rt build-publish       # Publish build info
-         jf build-scan  # Xray Scan Build info
+         jfrog rt build-scan
+         jfrog rt build-collect-env
+         jfrog rt build-publish
