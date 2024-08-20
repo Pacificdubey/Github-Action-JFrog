@@ -44,6 +44,6 @@ jobs:
       # publishing and scanning a build info for the build
       - name: publish build info
         run: |
-         jfrog rt build-scan
+         jfrog rt build-scan --build-name="Maven CI/CD" --build-number=${{ github.run_number }}
          jfrog rt build-collect-env
          jfrog rt build-publish
