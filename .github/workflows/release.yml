@@ -1,7 +1,7 @@
 name: JFrog Integration with Github Actions
-on: # [push]
-  release:
-    types: [published]
+on: [push]
+ # release:
+  #  types: [published]
 env:
   BUILD_NAME: Staging
   BUILD_NUMBER: ${{github.run_number}}
