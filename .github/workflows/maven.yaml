@@ -41,7 +41,7 @@ jobs:
            jfrog rt mvn deploy \
             --build-name="Maven CI/CD" \
             --build-number=${{ github.run_number }}
-      # publishing and scanning a build info for the build
+      # publishing and scanning a build info for the buil
       - name: publish build info
         run: |
          jfrog build-scan "Maven CI/CD" ${{ github.run_number }}
