@@ -31,6 +31,11 @@ jobs:
 
       - name: Build with Maven
         run: mvn clean install
+      - name: JFrog Maven Config
+        run: |
+         jfrog rt mvn-config \
+         --repo-release=maventest-libs-release-local \
+         --repo-snapshot=maventest-libs-snapshot-local
 
       - name: Publish to JFrog Artifactory
         run: |
