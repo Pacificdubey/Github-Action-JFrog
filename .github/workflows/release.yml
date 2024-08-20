@@ -57,7 +57,7 @@ jobs:
         jfrog rt upload *.whl python-test-pypi-local/ --build-name=$BUILD_NAME --build-number=$BUILD_NUMBER --detailed-summary
         # jfrog rt build-collect-env
         jfrog rt build-publish 
-        jf build-scan  # Xray Scan Build info
+        jfrog rt build-scan
      
 
      
