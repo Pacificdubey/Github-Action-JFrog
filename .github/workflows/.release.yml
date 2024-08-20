@@ -43,8 +43,8 @@ jobs:
        env:
           JF_URL: ${{ vars.JF_URL }}
        with:
-          oidc-provider-name: github
-          oidc-audience: my-aud
+          oidc-provider-name: githubtest
+          oidc-audience: aud
          
      - name: Test Connection
        run: |
@@ -55,6 +55,7 @@ jobs:
         jfrog rt upload *.whl python-test-pypi-local/ --build-name=$BUILD_NAME --build-number=$BUILD_NUMBER --detailed-summary
         # jfrog rt build-collect-env Staging ${{github.run_number}}
         jfrog rt build-publish $BUILD_NAME $BUILD_NUMBER --detailed-summary
+        jf build-scan  # Xray Scan Build info
      
 
      
