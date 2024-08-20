@@ -42,3 +42,8 @@ jobs:
            jfrog rt mvn deploy \
             --build-name="Maven CI/CD" \
             --build-number=${{ github.run_number }}
+      - name: Xray Scan and Publish Build Info
+        run: |
+         # Collect and publish the build info
+         jfrog rt build-collect-env "Maven CI/CD" ${{ github.run_number }}
+         jfrog rt build-publish "Maven CI/CD" ${{ github.run_number }}
