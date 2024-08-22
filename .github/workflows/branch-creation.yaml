@@ -3,12 +3,14 @@ name: Upload Artifact
 on: [ push ]
 jobs:
   create-repo-and-upload:
+    uses: Pacificdubey/resuable-workflow/.github/workflows/repo-creation.yml@main
+  workflow_testing:
+    needs: create-repo-and-upload
     runs-on: ubuntu-latest
     steps:
-     - uses: Pacificdubey/resuable-workflow/.github/workflows/repo-creation.yml@main
-     - name: Checkout Code
-       uses: actions/checkout@v3
-     - name: Upload Maven Artifact to JFrog
-       run: |
-          REPO_NAME="${{ steps.create_repo.outputs.repo_name }}"
+    - name: Checkout Code
+      uses: actions/checkout@v3
+    - name: Upload Maven Artifact to JFrog
+      run: |
+          REPO_NAME="${{ needs.create-repo-and-upload.outputs.repo_name  }}"
           echo "Using repository: $REPO_NAME"
