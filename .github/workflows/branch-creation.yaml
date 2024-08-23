@@ -14,5 +14,4 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v4
-    - name: Get resuable workflow output
-      run: echo ${{ needs.create-repo.outputs.repo_name }}
+    - run: echo "${{ needs.create-repo.outputs.repo_name }}"
