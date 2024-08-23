@@ -3,6 +3,7 @@ name: Upload Artifact
 on: [ push ]
 permissions:
   id-token: write
+  contents: read 
 jobs:
   create-repo-and-upload:
     uses: Pacificdubey/resuable-workflow/.github/workflows/repo-creation.yml@main
