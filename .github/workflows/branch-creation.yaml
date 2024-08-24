@@ -33,7 +33,9 @@ jobs:
 
     - name: Maven Build and Collect Build Info
       run: |
-          jfrog rt mvn "clean install" --build-name="Resuable Workflow" --build-number=${{ github.run_number }}
+          jfrog rt mvn deploy \
+          --build-name="Resuable Workflow" \
+          --build-number=${{ github.run_number }}
 
     - name: Publish Build Info
       run: |
