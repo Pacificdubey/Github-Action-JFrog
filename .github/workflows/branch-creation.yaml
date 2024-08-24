@@ -39,6 +39,7 @@ jobs:
 
     - name: Publish Build Info
       run: |
+          jfrog rt build-collect-env "Resuable Workflow" ${{ github.run_number }}
           jfrog rt bp "Resuable Workflow" ${{ github.run_number }}
           jfrog build-scan "Resuable Workflow" ${{ github.run_number }}
 
