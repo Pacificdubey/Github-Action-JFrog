@@ -28,19 +28,15 @@ jobs:
         oidc-provider-name: github
         oidc-audience: my-aud
     #- run: echo "${{ needs.create-repo.outputs.repo_name }}"
-    - name: Build with Maven
-      run: mvn clean package 
-    - name: Upload to artifact
+    - name: Maven Build and Collect Build Info
       run: |
-        REPO_NAME="${{ needs.create-repo.outputs.repo_name }}"
-        echo $REPO_NAME
-        jfrog rt u "target/*.jar" "$REPO_NAME/"
-    - name: publish build info
-      run: |
-         jfrog rt build-collect-env
-         jfrog rt build-publish "Resuable-test" 
-         jfrog build-scan 
+        jfrog rt mvn "clean install" --build-name="Resuable Workflow" --build-number=${{ github.run_number }} \
+        --deploy-repo=${{ needs.create-repo.outputs.repo_name }}
 
+
+    - name: Publish Build Info
+      run: |
+          jfrog rt bp "Resuable Workflow" ${{ github.run_number }}
 
 
 
