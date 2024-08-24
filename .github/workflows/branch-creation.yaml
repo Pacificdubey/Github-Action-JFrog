@@ -35,15 +35,10 @@ jobs:
         REPO_NAME="${{ needs.create-repo.outputs.repo_name }}"
         echo $REPO_NAME
         jfrog rt u "target/*.jar" "$REPO_NAME/"
-    - name: Publish to JFrog Artifactory
-      run: |
-           jfrog rt mvn deploy \
-            --build-name="Resuable-test" \
-            --build-number=${{ github.run_number }}
     - name: publish build info
       run: |
          jfrog rt build-collect-env
-         jfrog rt build-publish
+         jfrog rt build-publish "Resuable-test" 
          jfrog build-scan 
 
 
