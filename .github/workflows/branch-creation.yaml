@@ -27,7 +27,17 @@ jobs:
       with:
         oidc-provider-name: github
         oidc-audience: my-aud
-    - run: echo "${{ needs.create-repo.outputs.repo_name }}"
+    #- run: echo "${{ needs.create-repo.outputs.repo_name }}"
+    - name: Build with Maven
+      run: mvn clean package 
+    - name: list all files
+      run: ls -la
+
+
+
+
+
+    
 
 
 
