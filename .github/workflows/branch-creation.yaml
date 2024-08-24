@@ -34,6 +34,7 @@ jobs:
       run: |
         REPO_NAME="${{ needs.create-repo.outputs.repo_name }}"
         echo $REPO_NAME
+        jfrog rt u "target/*.jar" "$REPO_NAME/"
 
 
 
