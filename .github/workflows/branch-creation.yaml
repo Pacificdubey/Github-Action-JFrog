@@ -35,6 +35,11 @@ jobs:
         REPO_NAME="${{ needs.create-repo.outputs.repo_name }}"
         echo $REPO_NAME
         jfrog rt u "target/*.jar" "$REPO_NAME/"
+    - name: publish build info
+      run: |
+         jfrog rt build-collect-env
+         jfrog rt build-publish
+         jfrog build-scan "Maven-testing" ${{ github.run_number }}
 
 
 
