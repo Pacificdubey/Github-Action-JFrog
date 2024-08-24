@@ -29,7 +29,7 @@ jobs:
         oidc-audience: my-aud
     #- run: echo "${{ needs.create-repo.outputs.repo_name }}"
     - name: Configure Maven for Artifactory
-      run: jfrog rt mvn-config --repo-resolve="${{ needs.create-repo.outputs.repo_name }}" --repo-deploy="${{ needs.create-repo.outputs.repo_name }}"
+      run: jfrog rt mvn-config --repo-deploy-releases="${{ needs.create-repo.outputs.repo_name }}" --repo-deploy-snapshots="${{ needs.create-repo.outputs.repo_name }}"
 
     - name: Maven Build and Collect Build Info
       run: |
