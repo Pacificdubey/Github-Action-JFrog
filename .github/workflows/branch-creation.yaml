@@ -38,8 +38,8 @@ jobs:
     - name: publish build info
       run: |
          jfrog rt build-collect-env
-         jfrog rt build-publish
-         jfrog build-scan "Maven-testing" ${{ github.run_number }}
+         jfrog rt build-publish "Resuable-test" ${{ github.run_number }}
+         jfrog build-scan "Resuable-test" ${{ github.run_number }}
 
 
 
