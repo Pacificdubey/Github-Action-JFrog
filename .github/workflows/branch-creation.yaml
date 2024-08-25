@@ -28,15 +28,13 @@ jobs:
         oidc-provider-name: github
         oidc-audience: my-aud
     #- run: echo "${{ needs.create-repo.outputs.repo_name }}"
-    - name: Configure Maven for Artifactory
-      run: jfrog rt mvn-config --repo-deploy-releases="${{ needs.create-repo.outputs.repo_name }}" --repo-deploy-snapshots="${{ needs.create-repo.outputs.repo_name }}"
-
-    - name: Maven Build and Collect Build Info
+    - name: Build with Maven
+      run: mvn clean package 
+    - name: Upload to artifact
       run: |
-          jfrog rt mvn deploy \
-          --build-name="Resuable Workflow" \
-          --build-number=${{ github.run_number }}
-
+        REPO_NAME="${{ needs.create-repo.outputs.repo_name }}"
+        echo $REPO_NAME
+        jfrog rt u "target/*.jar" "$REPO_NAME/"
     - name: Publish Build Info
       run: |
           jfrog rt build-collect-env "Resuable Workflow" ${{ github.run_number }}
