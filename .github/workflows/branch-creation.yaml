@@ -34,7 +34,7 @@ jobs:
       run: |
         REPO_NAME="${{ needs.create-repo.outputs.repo_name }}"
         echo $REPO_NAME
-        jfrog rt u "target/*.jar" "$REPO_NAME/"
+        jfrog rt u "target/*.jar" "$REPO_NAME/"  --build-name="Resuable Workflow" --build-number="${{ github.run_number }}"
     - name: Publish Build Info
       run: |
           jfrog rt build-collect-env "Resuable Workflow" ${{ github.run_number }}
