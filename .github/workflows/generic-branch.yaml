@@ -32,7 +32,7 @@ jobs:
       run: |
         REPO_NAME="${{ needs.create-repo.outputs.repo_name }}"
         echo $REPO_NAME
-        jfrog rt u "sample_code.zip" "$REPO_NAME/Python_Package/"
+        jfrog rt u "sample_code.zip" "$REPO_NAME/CustomModuleName/"
     - name: Publish Build Info
       run: |
           jfrog rt build-collect-env "Generic Python" ${{ github.run_number }}
