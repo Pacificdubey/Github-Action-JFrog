@@ -1,0 +1,40 @@
+name: Generic Upload
+
+on: [ push ]
+permissions:
+  id-token: write
+  contents: read 
+jobs:
+  create-repo:
+     uses: Pacificdubey/resuable-workflow/.github/workflows/repo-creation.yml@main
+     with:
+          repo_type: generic
+  upload-artifact:
+    runs-on: ubuntu-latest
+    needs: create-repo
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Create Sample ZIP
+      run: |
+          mkdir sample_code
+          echo "print('Hello, JFrog!')" > sample_code/hello.py
+          zip -r sample_code.zip sample_code
+    - name: JFrog Setup
+      id: setup-cli
+      uses: jfrog/setup-jfrog-cli@v4.2.2
+      env:
+        JF_URL: ${{ vars.JF_URL }} # This should be the base URL of your Artifactory
+      with:
+        oidc-provider-name: github
+        oidc-audience: my-aud
+    - name: Upload to artifact
+      run: |
+        REPO_NAME="${{ needs.create-repo.outputs.repo_name }}"
+        echo $REPO_NAME
+        jfrog rt u "sample_code.zip" "$REPO_NAME/sample_code/sample_code.zip"  --build-name="Generic Python" --build-number="${{ github.run_number }}"
+    - name: Publish Build Info
+      run: |
+          jfrog rt build-collect-env "Generic Python" ${{ github.run_number }}
+          jfrog rt bp "Generic Python" ${{ github.run_number }}
+          jfrog build-scan "Generic Python" ${{ github.run_number }}
