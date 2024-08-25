@@ -35,6 +35,6 @@ jobs:
         jfrog rt u "sample_code.zip" "$REPO_NAME/CustomModuleName/"
     - name: Publish Build Info
       run: |
-          jfrog rt build-collect-env "Generic Python" ${{ github.run_number }}
+          jfrog rt build-collect-env 
           jfrog rt bp "Generic Python" ${{ github.run_number }}
           jfrog build-scan "Generic Python" ${{ github.run_number }}
