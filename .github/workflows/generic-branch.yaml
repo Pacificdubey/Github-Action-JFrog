@@ -36,5 +36,5 @@ jobs:
     - name: Publish Build Info
       run: |
           jfrog rt build-collect-env
-          jfrog rt bp 
+          jfrog rt bp "Generic Python" ${{ github.run_number }}
           jfrog build-scan
