@@ -51,16 +51,11 @@
                 <version>3.2.0</version>
                 <executions>
                     <execution>
-                        <id>extract-artifact-info</id>
+                        <id>parse-version</id>
                         <goals>
-                            <goal>evaluate</goal>
+                            <goal>parse-version</goal>
                         </goals>
                         <configuration>
-                            <expressions>
-                                <expression>project.groupId</expression>
-                                <expression>project.artifactId</expression>
-                                <expression>project.version</expression>
-                            </expressions>
                             <outputFile>${project.build.directory}/artifact-info.properties</outputFile>
                         </configuration>
                     </execution>
