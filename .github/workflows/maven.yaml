@@ -29,4 +29,4 @@ jobs:
           oidc-provider-name: githubtest
           oidc-audience: aud
     - name: Build with Maven
-      run: mvn clean package build-helper:evaluate
+      run: mvn clean package build-helper:parse-version
