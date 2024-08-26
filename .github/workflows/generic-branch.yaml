@@ -40,3 +40,5 @@ jobs:
           jfrog rt build-collect-env
           jfrog rt bp 
           #jfrog build-scan
+      env:
+        JFROG_CLI_BUILD_NAME: Generic Python
