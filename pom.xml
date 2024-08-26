@@ -36,15 +36,35 @@
                     <repoKey>${repoKey}</repoKey>
                 </configuration>
             </plugin>
-            <!-- Maven Compiler Plugin Configuration -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.1</version>
                 <configuration>
-                    <source>11</source> <!-- or specify another version like 11 -->
-                    <target>11</target> <!-- or specify another version like 11 -->
+                    <source>11</source>
+                    <target>11</target>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>3.2.0</version>
+                <executions>
+                    <execution>
+                        <id>extract-artifact-info</id>
+                        <goals>
+                            <goal>evaluate</goal>
+                        </goals>
+                        <configuration>
+                            <expressions>
+                                <expression>project.groupId</expression>
+                                <expression>project.artifactId</expression>
+                                <expression>project.version</expression>
+                            </expressions>
+                            <outputFile>${project.build.directory}/artifact-info.properties</outputFile>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
@@ -56,4 +76,3 @@
         </repository>
     </repositories>
 </project>
-
