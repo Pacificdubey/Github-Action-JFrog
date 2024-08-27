@@ -39,3 +39,10 @@ jobs:
         FILENAME="${ARTIFACT_ID}-${VERSION}-${TIMESTAMP}.jar"
         echo "FILENAME=$FILENAME" >> $GITHUB_ENV
         echo $FILENAME
+    - name: Upload to artifact
+      run: |
+        REPO_NAME="${{ needs.create-repo.outputs.repo_name }}"
+        echo $REPO_NAME 
+
+
+        
