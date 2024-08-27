@@ -33,9 +33,9 @@ jobs:
         run: |
           TIMESTAMP=$(date +"%Y%m%d%H%M%S")
           IMAGE_TAG="v1.0.0-${TIMESTAMP}"
+          REPO_NAME="${{ needs.create-repo.outputs.docker_repo }}"
           echo "IMAGE_TAG=${IMAGE_TAG}" >> $GITHUB_ENV
           echo "REPO_NAME=${REPO_NAME}" >> $GITHUB_ENV
-          REPO_NAME="${{ needs.create-repo.outputs.docker_repo }}"
           docker build -t pacificdubey.jfrog.io/${REPO_NAME}/myapp:${IMAGE_TAG} .
       - name: Push Docker image to staging repository
         run: |
