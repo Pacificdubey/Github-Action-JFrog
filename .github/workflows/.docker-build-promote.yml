@@ -1,4 +1,4 @@
-name: Maven CI/CD
+name: DockerBuild
 on: [push]
 permissions:
   id-token: write
