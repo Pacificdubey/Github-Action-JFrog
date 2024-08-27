@@ -1,14 +1,14 @@
-name: jFrog Docker Integration
-on:
-  push:
-    branches:
-      - main
-env:
-  RUN_NUMBER: ${{ github.run_number }}
+name: Maven CI/CD
+on: 
+  release:
+    types: [published]
 permissions:
   id-token: write
   contents: read 
 jobs:
+  create-repo:
+    uses: Pacificdubey/resuable-workflow/.github/workflows/docker-repo.yaml@main
+
   build:
     runs-on: ubuntu-latest
     steps:
