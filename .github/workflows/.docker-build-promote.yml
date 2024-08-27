@@ -1,7 +1,5 @@
 name: Maven CI/CD
-on: 
-  release:
-    types: [published]
+on: [push]
 permissions:
   id-token: write
   contents: read 
