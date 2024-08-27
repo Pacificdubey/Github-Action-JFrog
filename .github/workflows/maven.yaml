@@ -38,15 +38,16 @@ jobs:
         VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
         ORIGINAL_JAR="target/${ARTIFACT_ID}-${VERSION}.jar"
         TIMESTAMPED_JAR="target/${ARTIFACT_ID}-${VERSION}-${TIMESTAMP}.jar"
-        echo $ORIGINAL_JAR
         # Rename the JAR file with the timestamp
-        #mv "$ORIGINAL_JAR" "$TIMESTAMPED_JAR"
+        mv "$ORIGINAL_JAR" "$TIMESTAMPED_JAR"
         # Save the new filename in the environment for later steps
-        #echo "TIMESTAMPED_JAR=$TIMESTAMPED_JAR" >> $GITHUB_ENV
+        echo "TIMESTAMPED_JAR=$TIMESTAMPED_JAR" >> $GITHUB_ENV
     - name: Upload to artifact
       run: |
         REPO_NAME="${{ needs.create-repo.outputs.repo_name }}"
-        echo $REPO_NAME 
+        GROUP_ID=$(mvn help:evaluate -Dexpression=project.groupId -q -DforceStdout | tr '.' '/')
+        ARTIFACT_ID=$(mvn help:evaluate -Dexpression=project.artifactId -q -DforceStdout)
+        VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
         ls -la target/
 
 
