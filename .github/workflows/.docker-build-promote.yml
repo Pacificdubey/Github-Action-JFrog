@@ -37,6 +37,7 @@ jobs:
           docker build -t pacificdubey.jfrog.io/${REPO_NAME}/myapp:${IMAGE_TAG} .
       - name: Push Docker image to staging repository
         run: |
+         echo $TIMESTAMP
          docker push pacificdubey.jfrog.io/${REPO_NAME}/myapp:${IMAGE_TAG}
       - name: Get Docker image digest
         id: get-digest
