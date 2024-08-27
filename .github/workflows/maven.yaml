@@ -29,4 +29,12 @@ jobs:
           oidc-provider-name: githubtest
           oidc-audience: aud
     - name: Build with Maven
-      run: mvn clean package build-helper:parse-version
+      run: mvn clean package
+    - name: Generate Timestamped Filename
+      id: generate-filename
+      run: |
+        TIMESTAMP=$(date +"%Y%m%d%H%M%S")
+        ARTIFACT_ID=$(mvn help:evaluate -Dexpression=project.artifactId -q -DforceStdout)
+        VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+        FILENAME="${ARTIFACT_ID}-${VERSION}-${TIMESTAMP}.jar"
+        echo "FILENAME=$FILENAME" >> $GITHUB_ENV
