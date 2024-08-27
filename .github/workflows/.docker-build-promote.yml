@@ -40,7 +40,9 @@ jobs:
       - name: Push Docker image to staging repository
         run: |
          echo $IMAGE_TAG
-         docker push pacificdubey.jfrog.io/${REPO_NAME}/myapp:${IMAGE_TAG}
+         image="pacificdubey.jfrog.io/${REPO_NAME}/myapp:${IMAGE_TAG}"
+         echo $image
+         docker push #image
       - name: Get Docker image digest
         id: get-digest
         run: |
