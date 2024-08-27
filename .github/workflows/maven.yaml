@@ -30,15 +30,19 @@ jobs:
           oidc-audience: aud
     - name: Build with Maven
       run: mvn clean package
-    - name: Generate Timestamped Filename
-      id: generate-filename
+    - name: Generate Timestamped Filename and Rename JAR
+      id: rename-jar
       run: |
         TIMESTAMP=$(date +"%Y%m%d%H%M%S")
         ARTIFACT_ID=$(mvn help:evaluate -Dexpression=project.artifactId -q -DforceStdout)
         VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
-        FILENAME="${ARTIFACT_ID}-${VERSION}-${TIMESTAMP}.jar"
-        echo "FILENAME=$FILENAME" >> $GITHUB_ENV
-        echo $FILENAME
+        ORIGINAL_JAR="target/${ARTIFACT_ID}-${VERSION}.jar"
+        TIMESTAMPED_JAR="target/${ARTIFACT_ID}-${VERSION}-${TIMESTAMP}.jar"
+        echo $ORIGINAL_JAR
+        # Rename the JAR file with the timestamp
+        #mv "$ORIGINAL_JAR" "$TIMESTAMPED_JAR"
+        # Save the new filename in the environment for later steps
+        #echo "TIMESTAMPED_JAR=$TIMESTAMPED_JAR" >> $GITHUB_ENV
     - name: Upload to artifact
       run: |
         REPO_NAME="${{ needs.create-repo.outputs.repo_name }}"
