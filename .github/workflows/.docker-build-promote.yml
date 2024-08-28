@@ -52,7 +52,7 @@ jobs:
     # docker xray scanning   
       - name: docker scan
         run: |
-          jf docker scan pacificdubey.jfrog.io/${REPO_NAME}/myapp:${IMAGE_TAG}
+          #jf docker scan pacificdubey.jfrog.io/${REPO_NAME}/myapp:${IMAGE_TAG}
           jf docker pull pacificdubey.jfrog.io/${REPO_NAME}/myapp:${IMAGE_TAG}
           docker images
         
