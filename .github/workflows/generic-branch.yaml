@@ -32,3 +32,26 @@ jobs:
 
     - name: List Files (Debugging Step)
       run: ls -la 
+
+    - name: JFrog Setup
+      id: setup-cli
+      uses: jfrog/setup-jfrog-cli@v4.2.2
+      env:
+        JF_URL: ${{ vars.JF_URL }}
+      with:
+        oidc-provider-name: github
+        oidc-audience: my-aud
+
+    - name: Upload to Artifactory
+      run: |
+        REPO_NAME="${{ needs.create-repo.outputs.repo_name }}"
+        jfrog rt u "my-artifact_v${{ env.VERSION }}-${{ env.TIMESTAMP }}.zip" "$REPO_NAME/sample_code/"
+      env:
+        JFROG_CLI_BUILD_NAME: Generic Python
+
+    - name: Publish Build Info
+      run: |
+        jfrog rt build-collect-env
+        jfrog rt bp
+      env:
+        JFROG_CLI_BUILD_NAME: Generic Python
