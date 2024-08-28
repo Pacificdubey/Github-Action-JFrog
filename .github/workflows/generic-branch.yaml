@@ -33,7 +33,7 @@ jobs:
       run: |
         REPO_NAME="${{ needs.create-repo.outputs.repo_name }}"
         echo $REPO_NAME
-        jfrog rt u "my-artifact_v${{ env.VERSION }}-${{TIMESTAMP}}.zip" "$REPO_NAME/sample_code/sample_code.zip" 
+        jfrog rt u "my-artifact_v${{ env.VERSION }}-${{env.TIMESTAMP}}.zip" "$REPO_NAME/sample_code/sample_code.zip" 
       env:
         JFROG_CLI_BUILD_NAME: Generic Python
     - name: Publish Build Info
