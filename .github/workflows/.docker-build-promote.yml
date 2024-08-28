@@ -53,7 +53,8 @@ jobs:
       - name: docker scan
         run: |
           jf docker scan pacificdubey.jfrog.io/${REPO_NAME}/myapp:${IMAGE_TAG}
-        # jf docker pull pacificdubey.jfrog.io/${REPO_NAME}/myapp:${IMAGE_TAG}
+          jf docker pull pacificdubey.jfrog.io/${REPO_NAME}/myapp:${IMAGE_TAG}
+          docker images
         
     # adding the built docker into the JFrog build info
       - name: add docker package to build
