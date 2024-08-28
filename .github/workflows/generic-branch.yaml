@@ -20,7 +20,7 @@ jobs:
           echo "VERSION=1.0.0" >> $GITHUB_ENV
           mkdir sample_code
           echo "print('Hello, JFrog!')" > sample_code/hello.py
-          zip -r zip -r my-artifact_v${{ env.VERSION }}-${{env.TIMESTAMP}}.zip sample_code
+          zip -r my-artifact_v${{ env.VERSION }}-${{ env.TIMESTAMP }}.zip sample_code
     - name: JFrog Setup
       id: setup-cli
       uses: jfrog/setup-jfrog-cli@v4.2.2
