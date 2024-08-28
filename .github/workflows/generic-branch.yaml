@@ -6,7 +6,7 @@ permissions:
   contents: read 
 jobs:
   create-repo:
-     uses: Pacificdubey/resuable-workflow/.github/workflows/generic-repo.yaml@main
+     uses: Pacificdubey/resuable-workflow/.github/workflows/docker-repo.yaml@main
 
   upload-artifact:
     runs-on: ubuntu-latest
