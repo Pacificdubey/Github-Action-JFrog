@@ -52,6 +52,15 @@ jobs:
     - name: Publish Build Info
       run: |
           jfrog rt build-collect-env
+          jf rt build-add-props $BUILD_NAME $BUILD_NUMBER \
+            "vcs.url=${{ github.repository_url }}" \
+            "vcs.revision=${{ github.sha }}" \
+            "vcs.branch=${{ github.ref_name }}" \
+            "job.name=${{ github.job }}" \
+            "job.status=success" \
+            "github.run_id=${{ github.run_id }}" \
+            "github.ref=${{ github.ref }}" \
+            "build.timestamp=$(date +%Y-%m-%dT%H:%M:%SZ)"
           jfrog rt bp 
           #jfrog build-scan
       env:
