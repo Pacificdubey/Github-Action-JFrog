@@ -46,3 +46,14 @@ jobs:
       run: |
         REPO_NAME="${{ needs.create-repo.outputs.docker_repo }}"
         echo $REPO_NAME
+        jfrog rt u "my-artifact_v${{ env.VERSION }}-${{env.TIMESTAMP}}.zip" "$REPO_NAME/sample_code/"
+      env:
+        JFROG_CLI_BUILD_NAME: Generic Python
+    - name: Publish Build Info
+      run: |
+          jfrog rt build-collect-env
+          jfrog rt bp 
+          #jfrog build-scan
+      env:
+        JFROG_CLI_BUILD_NAME: Generic Python
+        
