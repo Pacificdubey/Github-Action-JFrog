@@ -1,7 +1,5 @@
 name: DockerBuild
-on:
-    release:
-      types: [published]
+on: [push]
 permissions:
   id-token: write
   contents: read 
