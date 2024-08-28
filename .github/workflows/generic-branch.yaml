@@ -1,9 +1,6 @@
 name: Generic Upload
 
-on:
-  push:
-    branches:
-      - main
+on: [push]
 permissions:
   id-token: write
   contents: read 
@@ -17,33 +14,14 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v4
-    - name: Create Sample ZIP
+    - name: Set Timestamp and Version
+      id: set-vars
       run: |
         echo "TIMESTAMP=$(date +'%Y%m%d%H%M%S')" >> $GITHUB_ENV
         echo "VERSION=1.0.0" >> $GITHUB_ENV
-        mkdir sample_code
-        echo "print('Hello, JFrog!')" > sample_code/hello.py
-        zip -r "my-artifact_v${{ env.VERSION }}-${{ env.TIMESTAMP }}.zip" sample_code
-    - name: JFrog Setup
-      id: setup-cli
-      uses: jfrog/setup-jfrog-cli@v4.2.2
-      env:
-        JF_URL: ${{ vars.JF_URL }} # This should be the base URL of your Artifactory
-      with:
-        oidc-provider-name: github
-        oidc-audience: my-aud
-    - name: Upload to artifact
+
+    - name: Verify Environment Variables (Debugging Step)
       run: |
-        REPO_NAME="${{ needs.create-repo.outputs.generic_repo }}"
-        echo $REPO_NAME
-        ls -la
-        jfrog rt u "my-artifact_v${{ env.VERSION }}-${{env.TIMESTAMP}}.zip" "$REPO_NAME/sample_code/" 
-      env:
-        JFROG_CLI_BUILD_NAME: Generic Python
-    - name: Publish Build Info
-      run: |
-          jfrog rt build-collect-env
-          jfrog rt bp 
-          #jfrog build-scan
-      env:
-        JFROG_CLI_BUILD_NAME: Generic Python
+        echo "Timestamp: ${{ env.TIMESTAMP }}"
+        echo "Version: ${{ env.VERSION }}"
+   
