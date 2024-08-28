@@ -1,7 +1,7 @@
 name: DockerBuild
-on:
-   release:
-    types: [published]
+on: [push]
+#   release:
+ #   types: [published]
 permissions:
   id-token: write
   contents: read 
@@ -45,23 +45,23 @@ jobs:
          image="pacificdubey.jfrog.io/${REPO_NAME}/myapp:${IMAGE_TAG}"
          echo $image
          docker push $image
-      - name: Get Docker image digest
-        id: get-digest
-        run: |
-          IMAGE_TAG="pacificdubey.jfrog.io/${REPO_NAME}/myapp:${IMAGE_TAG}"
-          DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' "$IMAGE_TAG" | cut -d '@' -f 2)
-          echo "DIGEST=$DIGEST" >> $GITHUB_ENV
+     # - name: Get Docker image digest
+      #  id: get-digest
+       # run: |
+      #    IMAGE_TAG="pacificdubey.jfrog.io/${REPO_NAME}/myapp:${IMAGE_TAG}"
+      #    DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' "$IMAGE_TAG" | cut -d '@' -f 2)
+      #    echo "DIGEST=$DIGEST" >> $GITHUB_ENV
     # docker xray scanning   
       - name: docker scan
         run: |
-          jf docker scan pacificdubey.jfrog.io/${REPO_NAME}/myapp:${IMAGE_TAG}
+          #jf docker scan pacificdubey.jfrog.io/${REPO_NAME}/myapp:${IMAGE_TAG}
           jf docker pull pacificdubey.jfrog.io/${REPO_NAME}/myapp:${IMAGE_TAG}
         
     # adding the built docker into the JFrog build info
       - name: add docker package to build
         run: |  
-         echo " jf docker scan pacificdubey.jfrog.io/${REPO_NAME}/myapp:${IMAGE_TAG}@${{ env.DIGEST }}" > metadata.json
-         jf rt build-docker-create ${REPO_NAME} --image-file metadata.json
+         #echo " jf docker scan pacificdubey.jfrog.io/${REPO_NAME}/myapp:${IMAGE_TAG}@${{ env.DIGEST }}" > metadata.json
+         #jf rt build-docker-create ${REPO_NAME} --image-file metadata.json
 
     # publishing and scanning a build info for the build
       - name: publish build info
