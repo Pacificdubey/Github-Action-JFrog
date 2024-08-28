@@ -65,8 +65,8 @@ jobs:
     # publishing and scanning a build info for the build
       - name: publish build info
         run: |
-         jf rt build-collect-env 
-         # jf rt build-publish
+         #jf rt build-collect-env 
+          jf rt build-publish
 
 
 
