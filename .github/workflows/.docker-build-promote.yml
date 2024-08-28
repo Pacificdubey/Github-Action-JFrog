@@ -23,8 +23,8 @@ jobs:
         env:
           JF_URL: ${{ vars.JF_URL }} # This should be the base URL of your Artifactory
         with:
-          oidc-provider-name: githubtest
-          oidc-audience: aud
+          oidc-provider-name: github
+          oidc-audience: my-aud
       - name: Authenticate Docker
         uses: docker/login-action@v3
         with:
