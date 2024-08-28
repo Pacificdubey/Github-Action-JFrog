@@ -24,4 +24,11 @@ jobs:
       run: |
         echo "Timestamp: ${{ env.TIMESTAMP }}"
         echo "Version: ${{ env.VERSION }}"
-   
+    - name: Create Sample ZIP
+      run: |
+        mkdir sample_code
+        echo "print('Hello, JFrog!')" > sample_code/hello.py
+        zip -r "my-artifact_v${{ env.VERSION }}-${{ env.TIMESTAMP }}.zip" sample_code
+
+    - name: List Files (Debugging Step)
+      run: ls -la 
