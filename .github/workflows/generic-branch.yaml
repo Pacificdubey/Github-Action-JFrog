@@ -6,7 +6,7 @@ permissions:
   contents: read 
 jobs:
   create-repo:
-     uses: Pacificdubey/resuable-workflow/.github/workflows/docker-repo.yaml@main
+     uses: Pacificdubey/resuable-workflow/.github/workflows/generic-repo.yaml@main
 
   upload-artifact:
     runs-on: ubuntu-latest
@@ -44,7 +44,7 @@ jobs:
 
     - name: Upload to Artifactory
       run: |
-        REPO_NAME="${{ needs.create-repo.outputs.docker_repo }}"
+        REPO_NAME="${{ needs.create-repo.outputs.generic_repo }}"
         echo $REPO_NAME
         jfrog rt u "my-artifact_v${{ env.VERSION }}-${{env.TIMESTAMP}}.zip" "$REPO_NAME/sample_code/"
       env:
