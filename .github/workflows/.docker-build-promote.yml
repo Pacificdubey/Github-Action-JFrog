@@ -48,13 +48,13 @@ jobs:
       - name: Get Docker image digest
         id: get-digest
         run: |
-         IMAGE_TAG1="pacificdubey.jfrog.io/${REPO_NAME}/myapp:${IMAGE_TAG}"
-         DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' "$IMAGE_TAG1" | cut -d '@' -f 2)
+         IMAGE_TAG="pacificdubey.jfrog.io/${REPO_NAME}/myapp:${IMAGE_TAG}"
+         DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' "$IMAGE_TAG" | cut -d '@' -f 2)
          echo "DIGEST=$DIGEST" >> $GITHUB_ENV
     # docker xray scanning   
       - name: docker scan
         run: |
-          #jf docker scan pacificdubey.jfrog.io/${REPO_NAME}/myapp:${IMAGE_TAG}
+          jf docker scan pacificdubey.jfrog.io/${REPO_NAME}/myapp:${IMAGE_TAG}
           jf docker pull pacificdubey.jfrog.io/${REPO_NAME}/myapp:${IMAGE_TAG}
         
     # adding the built docker into the JFrog build info
@@ -62,28 +62,9 @@ jobs:
         run: |  
          echo " jf docker scan pacificdubey.jfrog.io/${REPO_NAME}/myapp:${IMAGE_TAG}@${{ env.DIGEST }}" > metadata.json
          jf rt build-docker-create ${REPO_NAME} --image-file metadata.json
-
     # publishing and scanning a build info for the build
       - name: publish build info
         run: |
-         jf rt build-docker-create myapp-build --image "pacificdubey.jfrog.io/${REPO_NAME}/myapp:${IMAGE_TAG}" --env "workflow.name=DockerBuild;committer=${{ github.actor }};job.name=${{ github.job }}"
-         #jf rt build-collect-env 
+         jf rt set-props "pacificdubey.jfrog.io/${REPO_NAME}/myapp:${IMAGE_TAG}" "workflow.name=${{ github.workflow }};committer=${{ github.actor }};job.name=${{ github.job }}"
+         jf rt build-collect-env 
          jf rt build-publish
-
-      - name: Verify properties on Docker artifact
-        run: |
-          jf rt sp "pacificdubey.jfrog.io/${REPO_NAME}/myapp:${IMAGE_TAG}" "workflow.name=DockerBuild;committer=${{ github.actor }};job.name=${{ github.job }}"
-
-
-
-
-
-
-
-          
-
-
-
-
-
-
