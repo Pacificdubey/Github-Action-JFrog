@@ -45,7 +45,7 @@ jobs:
          image="pacificdubey.jfrog.io/${REPO_NAME}/myapp:${IMAGE_TAG}"
          echo $image
          docker push $image
-         jfrog rt sp --include-dirs pacificdubey.jfrog.io/${REPO_NAME}/myapp:${IMAGE_TAG} branch_name=master;tag=latest;type=docker
+         jfrog rt sp --include-dirs pacificdubey.jfrog.io/${REPO_NAME}/myapp:${IMAGE_TAG}/ branch_name=master;tag=latest;type=docker
       - name: Get Docker image digest
         id: get-digest
         run: |
