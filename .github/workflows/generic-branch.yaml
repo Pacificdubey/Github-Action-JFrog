@@ -46,7 +46,12 @@ jobs:
       run: |
         REPO_NAME="${{ needs.create-repo.outputs.generic_repo }}"
         echo $REPO_NAME
-        jfrog rt u "my-artifact_v${{ env.VERSION }}-${{env.TIMESTAMP}}.zip" "$REPO_NAME/sample_code/" --props "git.commit=${GIT_COMMIT};git.branch=${GIT_BRANCH};build.timestamp=${{ env.TIMESTAMP }}"
+        GIT_COMMIT="${{ github.sha }}"
+        GIT_BRANCH="${{ github.ref_name }}"
+        ARTIFACT_NAME="my-artifact_v${{ env.VERSION }}-${{ env.TIMESTAMP }}.zip"
+        # Upload to Artifactory with properties
+        jfrog rt u "$ARTIFACT_NAME" "$REPO_NAME/sample_code/" \
+        --props "git.commit=${GIT_COMMIT};git.branch=${GIT_BRANCH};build.timestamp=${{ env.TIMESTAMP }}"
       env:
         JFROG_CLI_BUILD_NAME: Generic Python
     - name: Publish Build Info
