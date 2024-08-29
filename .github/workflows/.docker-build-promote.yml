@@ -66,7 +66,7 @@ jobs:
     # publishing and scanning a build info for the build
       - name: publish build info
         run: |
-         jf rt build-append --props "workflow.name=${{ github.workflow }};committer=${{ github.actor }};job.name=${{ github.job }}" pacificdubey.jfrog.io/${REPO_NAME}/myapp:${IMAGE_TAG} 
+         jf rt set-props "pacificdubey.jfrog.io/${REPO_NAME}/myapp:${IMAGE_TAG}" "workflow.name=${{ github.workflow }};committer=${{ github.actor }};job.name=${{ github.job }}"
          jf rt build-collect-env 
          jf rt build-publish
 
