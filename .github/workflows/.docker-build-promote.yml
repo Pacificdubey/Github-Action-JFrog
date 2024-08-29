@@ -45,6 +45,7 @@ jobs:
          image="pacificdubey.jfrog.io/${REPO_NAME}/myapp:${IMAGE_TAG}"
          echo $image
          docker push $image
+         jf rt set-props "pacificdubey.jfrog.io/${REPO_NAME}/myapp:${IMAGE_TAG}" "workflow.name=${{ github.workflow }};committer=${{ github.actor }};job.name=${{ github.job }}"
       - name: Get Docker image digest
         id: get-digest
         run: |
@@ -66,7 +67,6 @@ jobs:
     # publishing and scanning a build info for the build
       - name: publish build info
         run: |
-         jf rt set-props "pacificdubey.jfrog.io/${env.REPO_NAME}/myapp:${env.IMAGE_TAG}" "workflow.name=${{ github.workflow }};committer=${{ github.actor }};job.name=${{ github.job }}"
          #jf rt build-collect-env 
          #jf rt build-publish
 
