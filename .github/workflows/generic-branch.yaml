@@ -56,7 +56,7 @@ jobs:
         ARTIFACT_NAME="my-artifact_v${{ env.VERSION }}-${{ env.TIMESTAMP }}.zip"
         # Upload to Artifactory with properties
         jfrog rt u "$ARTIFACT_NAME" "$REPO_NAME/sample_code/" \
-        --target-props "git.commit=${GIT_COMMIT};git.branch=${GIT_BRANCH};build.timestamp=20240829064321;workflow.name=${WORKFLOW_NAME};committer=${COMMITTER};job.name=${JOB_NAME}"
+        --target-props "git commit=${GIT_COMMIT};git branch=${GIT_BRANCH};workflow=${WORKFLOW_NAME};committer=${COMMITTER};job=${JOB_NAME}"
       env:
         JFROG_CLI_BUILD_NAME: Generic Python
     - name: Publish Build Info
