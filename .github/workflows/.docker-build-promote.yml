@@ -66,8 +66,9 @@ jobs:
     # publishing and scanning a build info for the build
       - name: publish build info
         run: |
+         jf rt build-docker-create myapp-build --image "pacificdubey.jfrog.io/${REPO_NAME}/myapp:${IMAGE_TAG}" --env "workflow.name=DockerBuild;committer=${{ github.actor }};job.name=${{ github.job }}"
          #jf rt build-collect-env 
-         #jf rt build-publish
+         jf rt build-publish
 
       - name: Verify properties on Docker artifact
         run: |
