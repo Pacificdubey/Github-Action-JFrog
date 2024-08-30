@@ -31,6 +31,7 @@ jobs:
         mkdir sample_code
         echo "print('Hello, JFrog!')" > sample_code/hello.py
         zip -r "my-artifact_v${{ env.VERSION }}-${{ env.TIMESTAMP }}.zip" sample_code
+        pwd
 
     - name: List Files (Debugging Step)
       run: ls -la 
