@@ -8,7 +8,7 @@ permissions:
   contents: read 
 jobs:
   versioning:
-    uses: Pacificdubey/resuable-workflow/.github/workflows/semantic_versioning.yml@main
+    uses: Pacificdubey/resuable-workflow/.github/workflows/semantic-version.yml@main
     with:
       version_file_path: './version.txt'
       patch: true  # Or change this based on release type or other logic
