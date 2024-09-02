@@ -5,7 +5,7 @@ on: [push]
    #  types: [published]
 permissions:
   id-token: write
-  contents: read 
+  contents: write
 jobs:
   versioning:
     uses: Pacificdubey/resuable-workflow/.github/workflows/semantic-version.yml@main
