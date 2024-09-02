@@ -11,3 +11,5 @@ artifactory-cleanup:
        # - rule: PropertyNeq
        #   property_key: key-name
         #  property_value: 1
+        #- rule: DeleteOlderThan
+         # days: 7
