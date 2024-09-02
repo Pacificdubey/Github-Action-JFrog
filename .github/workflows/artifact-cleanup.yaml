@@ -35,5 +35,6 @@ jobs:
           # Run the cleanup command with the downloaded configuration
           artifactory-cleanup --config config/cleanup_config.yml
       env:
-          JFROG_URL: ${{ vars.JF_URL }}
+         ARTIFACTORY_USERNAME: ${{ steps.setup-cli.outputs.oidc-user }}
+         ARTIFACTORY_PASSWORD: ${{ steps.setup-cli.outputs.oidc-token }}
       
