@@ -1,0 +1,10 @@
+# artifactory-cleanup.yaml
+artifactory-cleanup:
+  policies:
+    - name: Conan - delete files older than 60 days
+      rules:
+        - rule: RepoByMask
+          mask: "*testing*"
+        - rule: PropertyNeq
+          property_key: key-name
+          property_value: 1
