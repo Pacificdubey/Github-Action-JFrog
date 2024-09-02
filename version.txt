@@ -1,2 +1,2 @@
 # <MAJOR>.<MINOR>.<PATCH>
-1.2.4
+1.2.5
