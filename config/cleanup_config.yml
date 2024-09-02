@@ -1,5 +1,6 @@
 # artifactory-cleanup.yaml
 artifactory-cleanup:
+  server: ${{ vars.JF_URL }}
   policies:
     - name: Conan - delete files older than 60 days
       rules:
