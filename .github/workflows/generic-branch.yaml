@@ -6,6 +6,9 @@ on: [push]
 permissions:
   id-token: write
   contents: write
+env:
+  BUILD_NUMBER: ${{ github.run_number }}
+  VERSION: ${{ needs.versioning.outputs.new_version }}
 jobs:
   versioning:
     uses: Pacificdubey/resuable-workflow/.github/workflows/semantic-version.yml@main
@@ -21,10 +24,14 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v4
-      with:
-          fetch-depth: 0 
-    - name: Set Timestamp and Version
+    - name: Set Version
       id: set-vars
       run: |
-        echo "Version: ${{ needs.versioning.outputs.new_version }}"
+        echo "Version: ${{ env.VERSION }}"
+    - name: Create Sample ZIP
+      run: |
+        mkdir sample_code
+        echo "print('Hello, JFrog!')" > sample_code/hello.py
+        zip -r "my-artifact_${{ env.VERSION }}-${{ env.BUILD_NUMBER }}.zip" sample_code
+        ls -la
         
