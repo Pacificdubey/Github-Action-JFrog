@@ -34,4 +34,6 @@ jobs:
       run: |
           # Run the cleanup command with the downloaded configuration
           artifactory-cleanup --config config/cleanup_config.yml
+      env:
+          JFROG_URL: ${{ vars.JF_URL }}
       
