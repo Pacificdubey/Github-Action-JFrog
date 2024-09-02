@@ -8,6 +8,6 @@ artifactory-cleanup:
       rules:
         - rule: RepoByMask
           mask: "*testing*"
-        - rule: PropertyNeq
-          property_key: key-name
-          property_value: 1
+       # - rule: PropertyNeq
+       #   property_key: key-name
+        #  property_value: 1
