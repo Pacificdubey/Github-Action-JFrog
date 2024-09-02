@@ -30,4 +30,8 @@ jobs:
       with:
         oidc-provider-name: gittest
         oidc-audience: git-aud
+    - name: Run Cleanup
+      run: |
+          # Run the cleanup command with the downloaded configuration
+          artifactory-cleanup --config config/cleanup_config.yml
       
