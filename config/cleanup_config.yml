@@ -1,6 +1,6 @@
 # artifactory-cleanup.yaml
 artifactory-cleanup:
-  server: ${{ vars.JF_URL }}
+  server: https://prashanttest.jfrog.io/artifactory
   user: ${{ steps.setup-cli.outputs.oidc-user }}
   password: ${{ steps.setup-cli.outputs.oidc-token }}
   policies:
