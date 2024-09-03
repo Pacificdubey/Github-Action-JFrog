@@ -1,8 +1,8 @@
 name: Maven CI/CD
 
-on: #[push]
-  release:
-    types: [published]
+on: [push]
+  #release:
+   # types: [published]
 permissions:
   id-token: write
   contents: read 
@@ -33,7 +33,7 @@ jobs:
     - name: Run Cleanup
       run: |
           # Run the cleanup command with the downloaded configuration
-          artifactory-cleanup --config config/cleanup_config.yml
+          artifactory-cleanup --config config/cleanup-config-1.yml
           artifactory-cleanup --config config/cleanup_config.yml --destroy 
       env:
          ARTIFACTORY_USERNAME: ${{ steps.setup-cli.outputs.oidc-user }}
