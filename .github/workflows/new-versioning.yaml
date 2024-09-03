@@ -1,0 +1,37 @@
+name: Generic Upload
+
+on: [push]
+
+permissions:
+  id-token: write
+  contents: write 
+
+jobs:
+  versioning:
+    uses: Pacificdubey/resuable-workflow/.github/workflows/semantic-versioning-1.yaml@main
+    with:
+      version_file_path: './version.txt'
+      patch: false  # Or change this based on release type or other logic
+
+  create-repo:
+    uses: Pacificdubey/resuable-workflow/.github/workflows/generic-repo.yaml@main
+    needs: versioning
+
+  upload-artifact:
+    runs-on: ubuntu-latest
+    needs: [create-repo, versioning]
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Set Variables
+      run: |
+          echo "BUILD_NUMBER=${{ github.run_number }}" >> $GITHUB_ENV
+          echo "VERSION=${{ needs.versioning.outputs.new_version }}" >> $GITHUB_ENV
+
+    - name: Create Sample ZIP
+      run: |
+          mkdir sample_code
+          echo "print('Hello, JFrog!')" > sample_code/hello.py
+          zip -r "my-artifact_${{ env.VERSION }}-${{ env.BUILD_NUMBER }}.zip" sample_code
+          ls -la
