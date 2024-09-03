@@ -1,41 +1,15 @@
 name: Maven CI/CD
 
-on: [push]
-  #release:
-   # types: [published]
+on:  [push]
+   #release:
+    # types: [published]
 permissions:
   id-token: write
-  contents: read 
+  contents: write
+
 jobs:
-  cleanup-artifact:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-          python-version: '3.9'  # Specify the Python version
-    - name: Install artifactory-cleanup
-      run: |
-        python3 -mpip install artifactory-cleanup==1.0.0
-    - name: Check installation
-      run: artifactory-cleanup --help
-      
-    - name: JFrog Setup
-      id: setup-cli
-      uses: jfrog/setup-jfrog-cli@v4.2.2
-      env:
-        JF_URL: ${{ vars.JF_URL }} # This should be the base URL of your Artifactory
-      with:
-        oidc-provider-name: gittest
-        oidc-audience: git-aud
-    - name: Run Cleanup
-      run: |
-          # Run the cleanup command with the downloaded configuration
-          artifactory-cleanup --config config/cleanup-config-1.yml
-          artifactory-cleanup --config config/cleanup_config.yml --destroy 
-      env:
-         ARTIFACTORY_USERNAME: ${{ steps.setup-cli.outputs.oidc-user }}
-         ARTIFACTORY_PASSWORD: ${{ steps.setup-cli.outputs.oidc-token }}
+  versioning:
+    uses: Pacificdubey/resuable-workflow/.github/workflows/artifact-destroy.yaml@main
+    with:
+      destroy: 'true'
       
