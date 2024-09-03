@@ -5,14 +5,29 @@ artifactory-cleanup:
   password: $ARTIFACTORY_PASSWORD
 
   policies:
-    - name: "Delete un-deployed artifacts after 30 days"
+    - name: Delete un-deployed artifacts after 30 days from dev repositories
       rules:
-        - rule: "lastDownloaded"
-          olderThan: "30d"
-        - rule: "neverDownloaded"
-          value: "true"
+        - rule: RepoByMask
+          mask: "*dev*"  # Targets all repositories containing 'dev'
+        - rule: DeleteNotUsedSince
+          days: 30
+        - rule: ExcludePath
+          masks:
+            - "*prod*"  # Ensure that prod paths are excluded from this rule
 
-    - name: "Delete un-promoted build artifacts after 90 days"
+    - name: Delete un-promoted build artifacts after 90 days from dev repositories
       rules:
-        - rule: "lastModified"
-          olderThan: "90d"
+        - rule: RepoByMask
+          mask: "*dev*"  # Targets all repositories containing 'dev'
+        - rule: DeleteOlderThan
+          days: 90
+        - rule: ExcludePath
+          masks:
+            - "*prod*"  # Ensure that prod paths are excluded from this rule
+
+    - name: Preserve artifacts in 'prod' repositories
+      rules:
+        - rule: RepoByMask
+          mask: "*prod*"  # Targets all repositories containing 'prod'
+        - rule: KeepLatestNFiles
+          count: 10000  # High number to effectively not delete any artifacts
