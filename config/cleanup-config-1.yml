@@ -1,3 +1,10 @@
+# artifactory-cleanup.yaml
+artifactory-cleanup:
+  server: https://prashanttest.jfrog.io/artifactory
+  user: $ARTIFACTORY_USERNAME
+  password: $ARTIFACTORY_PASSWORD
+
+
 policies:
   - name: "Delete un-deployed artifacts after 30 days"
     repository:
