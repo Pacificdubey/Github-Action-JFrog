@@ -17,6 +17,10 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
+        with:
+         repository: 'Pacificdubey/resuable-workflow'
+         
+        
       - name: Build Artifact
         run: |
           echo "Building artifact for version ${{ needs.build-and-upload.outputs.version }}"
