@@ -1,0 +1,23 @@
+name: "Build and Deploy"
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-upload:
+    uses: your-organization/reusable-workflows/.github/workflows/semantic_version.yml@main
+    secrets:
+      github_token: ${{ secrets.GITHUB_TOKEN }}
+    outputs:
+      version: ${{ steps.versioning.outputs.new_version }}
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Build Artifact
+        run: |
+          echo "Building artifact for version ${{ needs.build-and-upload.outputs.version }}"
+          #
