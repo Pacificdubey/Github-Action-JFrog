@@ -10,6 +10,7 @@ permissions:
 jobs:
   versioning:
     uses: Pacificdubey/resuable-workflow/.github/workflows/artifact-destroy.yaml@main
+    secrets: inherit
     with:
       destroy: 'true'
       
