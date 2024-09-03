@@ -48,7 +48,7 @@ jobs:
         oidc-provider-name: gittest
         oidc-audience: git-aud
 
-    - name: Upload to Artifactorys
+    - name: Upload to Artifactory
       run: |
         REPO_NAME="${{ needs.create-repo.outputs.generic_repo }}"
         echo $REPO_NAME
