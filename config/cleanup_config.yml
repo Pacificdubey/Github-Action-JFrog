@@ -7,7 +7,7 @@ artifactory-cleanup:
     - name: Conan - delete files older than 60 days
       rules:
         - rule: RepoByMask
-          mask: "*testing*"
+          mask: "*generic*"
        # - rule: PropertyNeq
        #   property_key: key-name
         #  property_value: 1
