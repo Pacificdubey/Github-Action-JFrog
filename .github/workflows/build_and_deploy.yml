@@ -6,7 +6,7 @@ on: [ push]
 
 jobs:
   build:
-    uses: your-organization/reusable-workflows/.github/workflows/new-way-semantic.yaml@main
+    uses: Pacificdubey/resuable-workflow/.github/workflows/new-way-semantic.yaml@main
     secrets:
       github_token: ${{ secrets.GITHUB_TOKEN }}
 
