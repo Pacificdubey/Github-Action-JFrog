@@ -6,7 +6,7 @@ on:  [push]
 permissions:
   id-token: write
   contents: write
-
+# ckeanup artifact
 jobs:
   versioning:
     uses: Pacificdubey/resuable-workflow/.github/workflows/artifact-destroy.yaml@main
