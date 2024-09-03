@@ -6,28 +6,29 @@ artifactory-cleanup:
 
   policies:
     - name: "Delete un-deployed artifacts after 30 days"
-      repository:
-        include: "*-dev-local"
-        exclude: "*pro*"
       rules:
-        - lastDownloaded:
-            olderThan: 30d
-        - neverDownloaded: true
+        - rule: "lastDownloaded"
+          olderThan: "30d"
+        - rule: "neverDownloaded"
+          value: "true"
       actions:
-        - deleteArtifacts: {}
+        - action: "deleteArtifacts"
+      repository:
+        include: ["*-dev-local"]
+        exclude: ["*pro*"]
 
     - name: "Delete un-promoted build artifacts after 90 days"
-      repository:
-        include: "*-build-local"
-        exclude: "*pro*"
       rules:
-        - lastModified:
-            olderThan: 90d
+        - rule: "lastModified"
+          olderThan: "90d"
       actions:
-        - deleteArtifacts: {}
+        - action: "deleteArtifacts"
+      repository:
+        include: ["*-build-local"]
+        exclude: ["*pro*"]
 
     - name: "Preserve artifacts in 'pro' repositories"
-      repository:
-        include: "*pro*"
       actions:
-        - preserve: {}
+        - action: "preserve"
+      repository:
+        include: ["*pro*"]
