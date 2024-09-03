@@ -33,7 +33,7 @@ jobs:
           echo "BUILD_NUMBER=${{ github.run_number }}" >> $GITHUB_ENV
           echo "VERSION=${{ needs.versioning.outputs.new_version }}" >> $GITHUB_ENV
 
-    - name: Create Sample ZIPs
+    - name: Create Sample ZIP
       run: |
           mkdir sample_code
           echo "print('Hello, JFrog!')" > sample_code/hello.py
