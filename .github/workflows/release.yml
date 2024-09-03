@@ -1,7 +1,7 @@
 name: Build and Test Python
-on: [push]
- # release:
-  #  types: [published]
+on:
+  release:
+    types: [published]
 env:
   BUILD_NAME: Staging
   BUILD_NUMBER: ${{github.run_number}}
