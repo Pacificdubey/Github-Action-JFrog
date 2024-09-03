@@ -19,7 +19,8 @@ jobs:
   create-repo:
     uses: Pacificdubey/resuable-workflow/.github/workflows/generic-repo.yaml@main
     needs: versioning
-
+    
+  # upload artifact to jfrog
   upload-artifact:
     runs-on: ubuntu-latest
     needs: [create-repo, versioning]
