@@ -11,24 +11,8 @@ artifactory-cleanup:
           olderThan: "30d"
         - rule: "neverDownloaded"
           value: "true"
-      actions:
-        - action: "deleteArtifacts"
-      repository:
-        include: ["*-dev-local"]
-        exclude: ["*pro*"]
 
     - name: "Delete un-promoted build artifacts after 90 days"
       rules:
         - rule: "lastModified"
           olderThan: "90d"
-      actions:
-        - action: "deleteArtifacts"
-      repository:
-        include: ["*-build-local"]
-        exclude: ["*pro*"]
-
-    - name: "Preserve artifacts in 'pro' repositories"
-      actions:
-        - action: "preserve"
-      repository:
-        include: ["*pro*"]
