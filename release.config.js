@@ -4,9 +4,12 @@ module.exports = {
     { name: 'develop', prerelease: true },
     { name: 'feature/testing', prerelease: 'beta' }  // Automatically uses the branch name as the identifier
   ],
-  plugins: [
+plugins: [
     '@semantic-release/commit-analyzer',
     '@semantic-release/release-notes-generator',
-    //'@semantic-release/github'
+    '@semantic-release/github',
+    ['@semantic-release/exec', {
+      prepareCmd: 'echo ${nextRelease.version} > VERSION.txt'
+    }]
   ]
 };
