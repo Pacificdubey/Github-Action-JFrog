@@ -11,7 +11,8 @@ jobs:
   versioning:
     uses: Pacificdubey/resuable-workflow/.github/workflows/artifact-destroy.yaml@main
     secrets:
-      inherit: true
+      API_KEY: ${{ secrets.API_KEY }}
+      USERNAME: ${{ secrets.USERNAME }}
     with:
       destroy: 'true'
       
