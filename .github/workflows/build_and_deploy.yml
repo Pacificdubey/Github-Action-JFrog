@@ -8,7 +8,7 @@ jobs:
   build:
     uses: Pacificdubey/resuable-workflow/.github/workflows/new-way-semantic.yaml@main
     secrets:
-      github_token: ${{ secrets.GITHUB_TOKEN }}
+      custom_token: ${{ secrets.GITHUB_TOKEN }}
 
   artifact-upload:
     runs-on: ubuntu-latest
