@@ -14,7 +14,7 @@ jobs:
     uses: Pacificdubey/resuable-workflow/.github/workflows/semantic-versioning-1.yaml@main
     with:
       version_file_path: './version.txt'
-      patch: false  # Or change this based on release type or other logic
+      patch: true  # Or change this based on release type or other logic
 
   create-repo:
     uses: Pacificdubey/resuable-workflow/.github/workflows/generic-repo.yaml@main
