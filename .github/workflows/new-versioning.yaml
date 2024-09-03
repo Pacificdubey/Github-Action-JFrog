@@ -38,6 +38,8 @@ jobs:
     - name: JFrog Setup
       id: setup-cli
       uses: jfrog/setup-jfrog-cli@v4.2.2
+      env:
+        JF_URL: ${{ vars.JF_URL }}
       with:
         oidc-provider-name: gittest
         oidc-audience: git-aud
