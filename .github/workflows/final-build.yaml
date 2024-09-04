@@ -1,7 +1,7 @@
 name: "Build and Deploy"
 
-on: #[ push]
-  workflow_call:
+on: [ push]
+ # workflow_call:
   #  branches:
    # # - main
 permissions:
