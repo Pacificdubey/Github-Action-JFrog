@@ -22,5 +22,5 @@ jobs:
         
       - name: Build Artifact
         run: |
-          echo "Building artifact for version ${{ needs.build-and-upload.outputs.version }}"
+          echo "Building artifact for version ${{ needs.build.outputs.new_version }}"
           #
