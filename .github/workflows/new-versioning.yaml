@@ -3,7 +3,7 @@ name: Generic Upload
 on:
   push:
     branches:
-      - main
+      - feature/testing
 
 permissions:
   id-token: write
