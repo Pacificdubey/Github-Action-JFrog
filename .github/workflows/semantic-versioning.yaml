@@ -1,10 +1,11 @@
 name: Main Workflow
 
 on: [push]
-   #workflow_call:
+   #workflow_calls:
 
 permissions:
     contents: write
+    
 
 jobs:
   versioning:
