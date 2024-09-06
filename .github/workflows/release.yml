@@ -1,10 +1,12 @@
-name: JFrog Integration with Github Actions
-on: # [push]
+name: Build and Test Python
+on:
   release:
     types: [published]
 env:
   BUILD_NAME: Staging
   BUILD_NUMBER: ${{github.run_number}}
+permissions:
+    id-token: write
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -31,30 +33,30 @@ jobs:
   deploy-test:
     needs: build
     runs-on: ubuntu-latest
-    environment: Prod
+   # environment: Prod
     steps:
      - name: Download Build Artifcats
        uses: actions/download-artifact@v4
        with:
         name: dist
-     - name: Setup JFrog CLI
-       uses: jfrog/setup-jfrog-cli@v4
-       with:
-         version: '2.62.2'
+     - name: JFrog Setup
+       id: setup-cli
+       uses: jfrog/setup-jfrog-cli@v4.2.2
        env:
-         JF_PROJECT: "githubjfrog"
-         JF_URL: ${{ secrets.JF_URL }}
-         JF_ACCESS_TOKEN: ${{ secrets.JF_ACCESS_TOKEN }}
+         JF_URL: ${{ vars.JF_URL }} # This should be the base URL of your Artifactory
+       with:
+         oidc-provider-name: github
+         oidc-audience: my-aud
          
      - name: Test Connection
        run: |
          # Ping the server
          jf rt ping
-     - name: Upload artifact to staging
+     - name: Upload artifact to staging 
        run: |
         jfrog rt upload *.whl python-test-pypi-local/ --build-name=$BUILD_NAME --build-number=$BUILD_NUMBER --detailed-summary
-        # jfrog rt build-collect-env Staging ${{github.run_number}}
-        jfrog rt build-publish $BUILD_NAME $BUILD_NUMBER --detailed-summary
+        jfrog rt build-collect-env
+        jfrog rt build-publish
      
 
      
