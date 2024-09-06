@@ -1,16 +1,17 @@
-name: jFrog Docker Integration
-on:
-  push:
-    branches:
-      - feature/test
-env:
-  RUN_NUMBER: ${{ github.run_number }}
+name: DockerBuild
+on:    # [push]
+   release:
+    types: [published]
 permissions:
   id-token: write
   contents: read 
 jobs:
+  create-repo:
+    uses: Pacificdubey/resuable-workflow/.github/workflows/docker-repo.yaml@main
+
   build:
     runs-on: ubuntu-latest
+    needs: create-repo
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -20,23 +21,50 @@ jobs:
         id: setup-cli
         uses: jfrog/setup-jfrog-cli@v4.2.2
         env:
-          JF_URL: ${{ vars.JF_URL }}
+          JF_URL: ${{ vars.JF_URL }} # This should be the base URL of your Artifactory
         with:
           oidc-provider-name: github
           oidc-audience: my-aud
-      - name: JFrog Setup
-        run: jf rt ping
-
-
-
-
-
-
-
-          
-
-
-
-
-
-
+      - name: Authenticate Docker
+        uses: docker/login-action@v3
+        with:
+         registry: ${{ vars.JF_URL }}
+         username: ${{ steps.setup-cli.outputs.oidc-user }}
+         password: ${{ steps.setup-cli.outputs.oidc-token }}
+      - name: Build Docker image
+        run: |
+          TIMESTAMP=$(date +"%Y%m%d%H%M%S")
+          IMAGE_TAG="v1.0.0-${TIMESTAMP}"
+          REPO_NAME="${{ needs.create-repo.outputs.docker_repo }}"
+          echo "IMAGE_TAG=${IMAGE_TAG}" >> $GITHUB_ENV
+          echo "REPO_NAME=${REPO_NAME}" >> $GITHUB_ENV
+          docker build -t pacificdubey.jfrog.io/${REPO_NAME}/myapp:${IMAGE_TAG} .
+      - name: Push Docker image to staging repository
+        run: |
+         echo $IMAGE_TAG
+         image="pacificdubey.jfrog.io/${REPO_NAME}/myapp:${IMAGE_TAG}"
+         echo $image
+         docker push $image
+      - name: Get Docker image digest
+        id: get-digest
+        run: |
+         #IMAGE_TAG="pacificdubey.jfrog.io/${REPO_NAME}/myapp:${IMAGE_TAG}"
+         #DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' "$IMAGE_TAG" | cut -d '@' -f 2)
+         #echo "DIGEST=$DIGEST" >> $GITHUB_ENV
+    # docker xray scanning   
+      - name: docker scan
+        run: |
+          jf docker scan pacificdubey.jfrog.io/${REPO_NAME}/myapp:${IMAGE_TAG}
+          jf docker pull pacificdubey.jfrog.io/${REPO_NAME}/myapp:${IMAGE_TAG}
+        
+    # adding the built docker into the JFrog build info
+      - name: add docker package to build
+        run: |  
+        # echo " jf docker scan pacificdubey.jfrog.io/${REPO_NAME}/myapp:${IMAGE_TAG}@${{ env.DIGEST }}" > metadata.json
+        # jf rt build-docker-create ${REPO_NAME} --image-file metadata.json
+    # publishing and scanning a build info for the build
+      - name: publish build info
+        run: |
+         jfrog rt sp --include-dirs feature-testing-docker/myapp/v1.0.0-20240829105458 "workflow.name=${{ github.workflow }};committer=${{ github.actor }}"
+         #jf rt build-collect-env 
+         #jf rt build-publish

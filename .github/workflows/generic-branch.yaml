@@ -1,0 +1,68 @@
+name: Generic Upload
+
+on: # [push]
+   release:
+     types: [published]
+permissions:
+  id-token: write
+  contents: write
+
+jobs:
+  versioning:
+    uses: Pacificdubey/resuable-workflow/.github/workflows/semantic-version.yml@main
+    with:
+      version_file_path: './version.txt'
+      patch: true  # Or change this based on release type or other logic
+  create-repo:
+     uses: Pacificdubey/resuable-workflow/.github/workflows/generic-repo.yaml@main
+
+  upload-artifact:
+    runs-on: ubuntu-latest
+    needs: [create-repo, versioning]
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Set Variables
+      run: |
+          echo "BUILD_NUMBER=${{ github.run_number }}" >> $GITHUB_ENV
+          echo "VERSION=${{ needs.versioning.outputs.new_version }}" >> $GITHUB_ENV
+    - name: Create Sample ZIP
+      run: |
+          mkdir sample_code
+          echo "print('Hello, JFrog!')" > sample_code/hello.py
+          zip -r "my-artifact_${{ env.VERSION }}-${{ env.BUILD_NUMBER }}.zip" sample_code
+    - name: List Files (Debugging Step)
+      run: ls -la 
+
+    - name: JFrog Setup
+      id: setup-cli
+      uses: jfrog/setup-jfrog-cli@v4.2.2
+      env:
+        JF_URL: ${{ vars.JF_URL }} # This should be the base URL of your Artifactory
+      with:
+        oidc-provider-name: gittest
+        oidc-audience: git-aud
+
+    - name: Upload to Artifactory
+      run: |
+        REPO_NAME="${{ needs.create-repo.outputs.generic_repo }}"
+        echo $REPO_NAME
+        GIT_COMMIT="${{ github.sha }}"
+        GIT_BRANCH="${{ github.ref_name }}"
+        WORKFLOW_NAME="${GITHUB_WORKFLOW}"
+        COMMITTER="${GITHUB_ACTOR}"
+        JOB_NAME="${GITHUB_JOB}"
+        ARTIFACT_NAME="my-artifact_${{ env.VERSION }}-${{ env.BUILD_NUMBER }}.zip"
+        # Upload to Artifactory with properties
+        jfrog rt u "$ARTIFACT_NAME" "$REPO_NAME/sample_code/" \
+        --target-props "git.commit=${GIT_COMMIT};branch=${GIT_BRANCH};workflow=${WORKFLOW_NAME};committer=${COMMITTER};job=${JOB_NAME}"
+      env:
+        JFROG_CLI_BUILD_NAME: Generic Python
+    - name: Publish Build Info
+      run: |
+          jfrog rt build-collect-env
+          jfrog rt bp 
+          #jfrog build-scan
+      env:
+        JFROG_CLI_BUILD_NAME: Generic Python
+        
