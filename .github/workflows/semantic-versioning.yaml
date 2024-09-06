@@ -3,6 +3,9 @@ name: Main Workflow
 on: [push]
    #workflow_call:
 
+permissions:
+    contents: write
+
 jobs:
   versioning:
     uses: Pacificdubey/resuable-workflow/.github/workflows/final-semanting.yaml@main
