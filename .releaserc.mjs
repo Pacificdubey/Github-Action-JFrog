@@ -1,6 +1,6 @@
 import semanticRelease from "semantic-release";
 
-// Extracts the branch name from GITHUB_REF (e.g., "refs/heads/main" -> "main")
+// Extract the branch name from GITHUB_REF (e.g., "refs/heads/main" -> "main")
 const branchName = process.env.BRANCH_NAME || process.env.GITHUB_REF?.split('/').pop() || "default";
 
 console.log(`Branch name detected: ${branchName}`);
