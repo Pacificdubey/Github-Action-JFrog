@@ -1,3 +1,10 @@
+## [1.3.0-develop.3](https://github.com/Pacificdubey/Github-Action-JFrog/compare/v1.3.0-develop.2...v1.3.0-develop.3) (2024-09-06)
+
+
+### Bug Fixes
+
+* corrected an issue with final-build.yaml ([883b659](https://github.com/Pacificdubey/Github-Action-JFrog/commit/883b65981b1279c76e37e494697d28d0169b9b68))
+
 ## [1.3.0-develop.2](https://github.com/Pacificdubey/Github-Action-JFrog/compare/v1.3.0-develop.1...v1.3.0-develop.2) (2024-09-06)
 
 
