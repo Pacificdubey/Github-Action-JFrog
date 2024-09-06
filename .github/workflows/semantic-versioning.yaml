@@ -1,0 +1,16 @@
+name: Main Workflow
+
+on: #[push]
+   workflow_call:
+
+jobs:
+  versioning:
+    uses: Pacificdubey/resuable-workflow/.github/workflows/final-semanting.yaml@main
+
+  deploy:
+    needs: versioning
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy Using Version
+        run: |
+          echo "Deploying with version ${{ needs.versioning.outputs.next_tag }}"
