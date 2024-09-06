@@ -17,7 +17,7 @@ semanticRelease({
     ["@semantic-release/release-notes-generator", { preset: "conventionalcommits" }],
     ["@semantic-release/changelog", { changelogFile: "CHANGELOG.md" }],
     ["@semantic-release/exec", {
-      prepareCmd: `echo "PREV_TAG=v${process.env.LAST_VERSION}" >> $GITHUB_ENV; echo "NEXT_TAG=v${process.env.NEXT_VERSION}" >> $GITHUB_ENV; echo "RELEASE_TYPE=${process.env.RELEASE_TYPE}" >> $GITHUB_ENV`
+      prepareCmd: `echo "PREV_TAG=v${process.env.LAST_VERSION}" >> $GITHUB_OUTPUT; echo "NEXT_TAG=v${process.env.NEXT_VERSION}" >> $GITHUB_OUTPUT; echo "RELEASE_TYPE=${process.env.RELEASE_TYPE}" >> $GITHUB_OUTPUT`
     }],
     "@semantic-release/git",
     ...(branchName === "main" ? ["@semantic-release/github", {
