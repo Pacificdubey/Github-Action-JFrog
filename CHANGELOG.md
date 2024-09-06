@@ -1,3 +1,10 @@
+## [1.3.0-develop.1](https://github.com/Pacificdubey/Github-Action-JFrog/compare/v1.2.1-develop.1...v1.3.0-develop.1) (2024-09-06)
+
+
+### Features
+
+* changed the format of the final-build.yaml file ([b9b005e](https://github.com/Pacificdubey/Github-Action-JFrog/commit/b9b005e269b3224bc386f73816c90ccc9c992d8f))
+
 ## [1.2.1-develop.1](https://github.com/Pacificdubey/Github-Action-JFrog/compare/v1.2.0...v1.2.1-develop.1) (2024-09-06)
 
 
