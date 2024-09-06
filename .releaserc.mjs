@@ -12,7 +12,6 @@ semanticRelease({
     { "name": "develop", "prerelease": true },
     { "name": "release/*", "prerelease": true }
   ],
-  tagFormat: tagFormat,  // Dynamically adjust tag format
   plugins: [
     ["@semantic-release/commit-analyzer", { preset: "conventionalcommits" }],
     ["@semantic-release/release-notes-generator", { preset: "conventionalcommits" }],
