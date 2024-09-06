@@ -5,23 +5,6 @@ const branchName = process.env.BRANCH_NAME || process.env.GITHUB_REF?.split('/')
 
 console.log(`Branch name detected: ${branchName}`);
 
-// Determine the tag format based on the branch
-let tagFormat = "v${version}";
-let prereleaseIdentifier = false;  // No prerelease for main
-
-// Apply unique prerelease identifiers based on branch type
-if (branchName === "develop") {
-  prereleaseIdentifier = "beta";  // Use beta for develop
-  tagFormat = "v${version}-beta";
-} else if (branchName.startsWith("feature/")) {
-  // Dynamically generate a unique prerelease identifier for each feature branch
-  prereleaseIdentifier = branchName.replace(/\//g, '-');  // Use branch name for prerelease
-  tagFormat = "v${version}-" + prereleaseIdentifier;
-} else if (branchName.startsWith("release/")) {
-  prereleaseIdentifier = "rc";  // Use release candidate for release branches
-  tagFormat = "v${version}-rc";
-}
-
 // Define the Semantic Release configuration
 semanticRelease({
 "branches": [
