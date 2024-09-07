@@ -28,12 +28,9 @@ semanticRelease({
   stderr: process.stderr,
 })
   .then(({ lastRelease, nextRelease }) => {
-    console.log(`Last release: ${lastRelease?.version}`);
-    console.log(`Next release: ${nextRelease?.version}`);
-
-    // Set environment variables for GitHub Actions
+    // If no nextRelease, use the lastRelease
     const prevTag = lastRelease?.version || "0.0.0";
-    const nextTag = nextRelease?.version || "1.0.0";
+    const nextTag = nextRelease?.version || prevTag; // Use lastRelease if nextRelease is undefined
     const releaseType = nextRelease?.type || "patch";
 
     process.env.LAST_VERSION = prevTag;
