@@ -2,7 +2,7 @@ import semanticRelease from "semantic-release";
 
 semanticRelease({
   branches: [
-    "main",                // Main production branch
+    "main",                // Main production branchs
     { name: "develop", prerelease: true },  // Develop branch for pre-releases
     { name: "release/*", prerelease: true } // Release branches for pre-releases
   ],
