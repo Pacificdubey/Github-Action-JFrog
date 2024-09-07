@@ -17,4 +17,10 @@ jobs:
     steps:
       - name: Deploy Using Version
         run: |
-          echo "Deploying with version ${{ needs.versioning.outputs.next_tag }}"
+         if [ "${{ needs.call-semantic-release.outputs.next_tag }}" = "v1.0.0" ]; then
+          echo "No new release detected, using previous tag: ${{ needs.call-semantic-release.outputs.previous_tag }}"
+          #echo "VERSION=${{ needs.call-semantic-release.outputs.previous_tag }}" >> $GITHUB_ENV
+         else
+          echo "New release detected, using next tag: ${{ needs.call-semantic-release.outputs.next_tag }}"
+          #echo "VERSION=${{ needs.call-semantic-release.outputs.next_tag }}" >> $GITHUB_ENV
+         fi
