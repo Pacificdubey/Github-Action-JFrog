@@ -2,9 +2,11 @@ name: Main Workflow
 
 on: [push]
    #workflow_call:
-
+   
 permissions:
-    contents: write
+  contents: write
+  issues: write
+  pull-requests: write
     
 
 jobs:
