@@ -1,6 +1,4 @@
 import semanticRelease from "semantic-release";
-import { writeFileSync } from "fs";
-import { join } from "path";
 
 // Extract the branch name
 const branchName = process.env.BRANCH_NAME || process.env.GITHUB_REF?.split('/').pop() || "default";
@@ -39,21 +37,15 @@ semanticRelease({
     process.env.NEXT_VERSION = nextTag;
     process.env.RELEASE_TYPE = releaseType;
 
-    // Write GitHub Actions outputs to $GITHUB_OUTPUT
-    const githubOutputPath = process.env.GITHUB_OUTPUT || "/dev/null"; // default to /dev/null if GITHUB_OUTPUT is not set
+    // Write outputs to $GITHUB_OUTPUT
+    console.log(`PREV_TAG=v${prevTag}`); 
+    console.log(`NEXT_TAG=v${nextTag}`); 
+    console.log(`RELEASE_TYPE=${releaseType}`); 
 
-    const outputContent = `
-PREV_TAG=v${prevTag}
-NEXT_TAG=v${nextTag}
-RELEASE_TYPE=${releaseType}
-`.trim();
-
-    writeFileSync(githubOutputPath, outputContent, { flag: "a" });
-
-    // Log the results for visibility
-    console.log(`Last release: v${prevTag}`);
-    console.log(`Next release: v${nextTag}`);
-    console.log(`Release type: ${releaseType}`);
+    // Echo output to GitHub Actions
+    console.log(`echo "PREV_TAG=v${prevTag}" >> $GITHUB_OUTPUT`);
+    console.log(`echo "NEXT_TAG=v${nextTag}" >> $GITHUB_OUTPUT`);
+    console.log(`echo "RELEASE_TYPE=${releaseType}" >> $GITHUB_OUTPUT`);
   })
   .catch(err => {
     console.error("The automated release failed with %O", err);
