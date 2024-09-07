@@ -29,4 +29,4 @@ jobs:
         fi
     
     - name: Use Version
-      run: echo "Version to use: ${{ env.VERSION }}"
+      run: echo "Version to use:${{ env.VERSION}}"
