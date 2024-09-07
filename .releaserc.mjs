@@ -2,9 +2,9 @@ import semanticRelease from "semantic-release";
 
 semanticRelease({
   branches: [
-    { name: "main" }, // Main branch for production releases
-    { name: "develop", prerelease: true }, // Develop branch for prereleases
-    { name: "release/*", prerelease: true } // Wildcard for release branches
+     'main', // Main branch for production releases
+    { name: 'develop', prerelease: true }, // Develop branch for prereleases
+    { name: 'release/*', prerelease: true } // Wildcard for release branches
   ],
   plugins: [
     ["@semantic-release/commit-analyzer", { preset: "conventionalcommits" }],
