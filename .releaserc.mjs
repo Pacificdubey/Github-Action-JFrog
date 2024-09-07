@@ -1,7 +1,7 @@
 import semanticRelease from "semantic-release";
 import { execSync } from "child_process";
 
-// Extract the branch name
+// Extract the branch names
 const branchName = process.env.BRANCH_NAME || process.env.GITHUB_REF?.split('/').pop() || "default";
 console.log(`Branch name detected: ${branchName}`);
 
