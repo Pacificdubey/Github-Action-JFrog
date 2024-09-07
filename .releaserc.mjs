@@ -2,9 +2,9 @@ import semanticRelease from "semantic-release";
 
 semanticRelease({
   branches: [
-    { name: "main" },                // Main production branch
-    { name: "develop", prerelease: true },  // Develop branch for pre-releases
-    { name: "release/*", prerelease: true } // Release branches for pre-releases
+    { name: "main" }, // Main branch for production releases
+    { name: "develop", prerelease: true }, // Develop branch for prereleases
+    { name: "release/*", prerelease: true } // Wildcard for release branches
   ],
   plugins: [
     ["@semantic-release/commit-analyzer", { preset: "conventionalcommits" }],
@@ -19,3 +19,4 @@ semanticRelease({
 }).catch(err => {
   console.error("The automated release failed with %O", err);
 });
+
