@@ -1,3 +1,10 @@
+## [1.3.0-develop.4](https://github.com/Pacificdubey/Github-Action-JFrog/compare/v1.3.0-develop.3...v1.3.0-develop.4) (2024-09-07)
+
+
+### Bug Fixes
+
+* File updated ([d3095ae](https://github.com/Pacificdubey/Github-Action-JFrog/commit/d3095ae9a97b1cac5fb0555f83e8a23839018994))
+
 ## [1.3.0-develop.3](https://github.com/Pacificdubey/Github-Action-JFrog/compare/v1.3.0-develop.2...v1.3.0-develop.3) (2024-09-06)
 
 
