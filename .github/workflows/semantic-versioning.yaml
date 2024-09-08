@@ -1,0 +1,25 @@
+name: Main Workflow
+
+on: [push]
+   #workflow_call:
+   
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+  actions: read
+    
+
+jobs:
+  versioning:
+    uses: Pacificdubey/resuable-workflow/.github/workflows/final-semanting.yaml@main
+
+  deploy:
+    needs: [versioning]
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Use Version
+      run: echo "Version to use:${{ needs.versioning.outputs.next_tag}}"
