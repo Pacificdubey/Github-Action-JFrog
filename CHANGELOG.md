@@ -1,3 +1,10 @@
+## [1.3.1](https://github.com/Pacificdubey/Github-Action-JFrog/compare/v1.3.0...v1.3.1) (2024-09-08)
+
+
+### Bug Fixes
+
+* Update semantic-versioning.yaml ([0c11048](https://github.com/Pacificdubey/Github-Action-JFrog/commit/0c110486eeb911138278cc0f317f2e3c44721f21))
+
 ## [1.3.1-develop.1](https://github.com/Pacificdubey/Github-Action-JFrog/compare/v1.3.0...v1.3.1-develop.1) (2024-09-08)
 
 
