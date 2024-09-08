@@ -1,7 +1,6 @@
 name: DockerBuild
-on:    # [push]
-   release:
-    types: [published]
+on: #[push]
+  workflow_call:
 permissions:
   id-token: write
   contents: read 
