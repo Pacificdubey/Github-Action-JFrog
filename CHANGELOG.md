@@ -1,3 +1,12 @@
+## [1.3.0-develop.13](https://github.com/Pacificdubey/Github-Action-JFrog/compare/v1.3.0-develop.12...v1.3.0-develop.13) (2024-09-08)
+
+
+### Features
+
+* **authentication:** add OAuth support ([6d4088d](https://github.com/Pacificdubey/Github-Action-JFrog/commit/6d4088d107b75510b5176106179579ad39b0eb77))
+* **authentication:** add OAuth support ([f1a5b42](https://github.com/Pacificdubey/Github-Action-JFrog/commit/f1a5b420525dc5b3890cf14dc22a469dfe512d90))
+* **authentication:** add OAuth support ([c3eaa8b](https://github.com/Pacificdubey/Github-Action-JFrog/commit/c3eaa8b89bd81cd3d426e4fe573a5b34ed5809de))
+
 ## [1.3.0](https://github.com/Pacificdubey/Github-Action-JFrog/compare/v1.2.0...v1.3.0) (2024-09-08)
 
 
