@@ -1,6 +1,6 @@
 module.exports = {
   branches: [
-    "main", // Main branch for production release
+    "main", // Main branch for production releases
     { name: "develop", prerelease: true }, // Develop branch for prereleases
     { name: "release/*", prerelease: true } // Wildcard for release branches
   ],
