@@ -1,3 +1,10 @@
+## [1.3.0-develop.11](https://github.com/Pacificdubey/Github-Action-JFrog/compare/v1.3.0-develop.10...v1.3.0-develop.11) (2024-09-08)
+
+
+### Bug Fixes
+
+* Update release.config.js ([0b0a149](https://github.com/Pacificdubey/Github-Action-JFrog/commit/0b0a14987fedeb793c42b4e7a83df99967277684))
+
 ## [1.3.0-develop.10](https://github.com/Pacificdubey/Github-Action-JFrog/compare/v1.3.0-develop.9...v1.3.0-develop.10) (2024-09-07)
 
 
