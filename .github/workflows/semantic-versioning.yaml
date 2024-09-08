@@ -15,11 +15,11 @@ jobs:
     uses: Pacificdubey/resuable-workflow/.github/workflows/final-semanting.yaml@main
 
   deploy:
-    needs: versioning
+    needs: [versioning]
     runs-on: ubuntu-latest
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
 
     - name: Use Version
-      run: echo "Version to use:${{ jobs.versioning.outputs.next_tag}}"
+      run: echo "Version to use:${{ needs.versioning.outputs.next_tag}}"
