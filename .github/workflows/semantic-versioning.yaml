@@ -21,15 +21,5 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: Determine Version to Use
-      run: |
-        if [ "${{ needs.versioning.outputs.next_tag }}" = "v1.0.0" ]; then
-          echo "No new release detected, using previous tag: ${{ needs.versioning.outputs.previous_tag }}"
-          echo "VERSION=${{ needs.versioning.outputs.previous_tag }}" >> $GITHUB_ENV
-        else
-          echo "New release detected, using next tag: ${{ needs.versioning.outputs.next_tag }}"
-          echo "VERSION=${{ needs.versioning.outputs.next_tag }}" >> $GITHUB_ENV
-        fi
-    
     - name: Use Version
-      run: echo "Version to use:${{ env.VERSION}}"
+      run: echo "Version to use:${{ jobs.versioning.outputs.next_tag}}"
