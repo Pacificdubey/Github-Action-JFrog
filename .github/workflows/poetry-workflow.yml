@@ -22,3 +22,6 @@ jobs:
       run: |
         poetry config virtualenvs.create false 
         poetry install --with dev
+    - name: Run Tests
+      run: |
+        pytest
