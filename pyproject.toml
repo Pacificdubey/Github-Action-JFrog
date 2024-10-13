@@ -9,7 +9,7 @@ package-mode = false
 python = "^3.11.9"
 
 [tool.poetry.group.dev.dependencies]
-pytest = "^6.2.5"
+pytest = "^7.4.0"
 
 [tool.poetry.group.dev]
 optional = true
