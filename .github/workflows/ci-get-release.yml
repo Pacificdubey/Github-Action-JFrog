@@ -1,0 +1,39 @@
+name: CD Pipeline for Deploying to S3
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: 'The release tag to deploy. Run this workflow once to list all available tags in the output log.'
+        required: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: List All Available Release Tags
+      id: list_tags
+      run: |
+        echo "Fetching all release tags..."
+        curl -s https://api.github.com/repos/${{ github.repository }}/releases | jq -r '.[].tag_name'
+        echo "Above are the available release tags. Please re-run the workflow and specify a tag."
+
+    - name: Print Release Tag
+      if: ${{ github.event.inputs.release_tag }}
+      run: |
+        echo "Release Tag: ${{ github.event.inputs.release_tag }}"
+      
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.10
+
+    - name: Get Release Information
+      id: get_release
+      run: |
+        release_url=$(curl -s https://api.github.com/repos/${{ github.repository }}/releases/tags/${{ github.event.inputs.release_tag }} | jq -r '.assets[0].browser_download_url')
+        echo "Release Artifact URL: $release_url"
