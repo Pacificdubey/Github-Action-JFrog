@@ -25,12 +25,12 @@ jobs:
         echo "Release Tag: ${{ github.event.inputs.release_tag }}"
       
     - name: Checkout Repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
 
     - name: Set up Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
-        python-version: 3.10
+        python-version: 3.11
 
     - name: Get Release Information
       id: get_release
