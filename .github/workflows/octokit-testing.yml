@@ -1,0 +1,31 @@
+name: Get SHA for Tag
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Tag name to fetch SHA for'
+        required: true
+        default: 'v1.0.0'
+
+jobs:
+  get-sha-for-tag:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Get commit SHA for tag
+        id: fetch_sha
+        uses: octokit/request-action@v2.x
+        with:
+          route: GET /repos/${{ github.repository }}/git/ref/tags/${{ github.event.inputs.tag }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract SHA from response
+        id: extract_sha
+        run: |
+          SHA=$(echo "${{ steps.fetch_sha.outputs.data }}" | jq -r '.object.sha')
+          echo "SHA=$SHA" >> $GITHUB_ENV
+
+      - name: Display the SHA
+        run: echo "The commit SHA for the tag is ${{ env.SHA }}"
