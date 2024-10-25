@@ -21,11 +21,5 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Extract SHA from response
-        id: extract_sha
-        run: |
-          SHA=$(echo "${{ steps.fetch_sha.outputs.data }}" | jq -r '.object.sha')
-          echo "SHA=$SHA" >> $GITHUB_ENV
-
-      - name: Display the SHA
-        run: echo "The commit SHA for the tag is ${{ env.SHA }}"
+      - name: Print full API response
+        run: echo "${{ steps.fetch_sha.outputs.data }}"
