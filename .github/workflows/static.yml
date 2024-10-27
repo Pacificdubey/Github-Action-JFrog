@@ -98,7 +98,9 @@ jobs:
             echo "workflow_name=$WORKFLOW_NAME" >> $GITHUB_OUTPUT
             echo "updated_at=$UPDATED_AT" >> $GITHUB_OUTPUT
           fi
-
+      - name: Install gettext
+        run: sudo apt-get update && sudo apt-get install -y gettext
+      
       - name: Generate Deployment Status HTML
         run: |
           # File paths
@@ -115,16 +117,7 @@ jobs:
           COMMIT_DATE="${{ env.COMMIT_DATE }}"
           DEPLOY_TIME="${{ steps.find_workflow_run.outputs.updated_at }}"
 
-          # Use perl to replace placeholders in index.html
-          perl -i -0777 -pe "s/\{\{\s*TAG\s*\}\}/\$ENV{TAG}/g" "$INDEX_FILE"
-          perl -i -0777 -pe "s/\{\{\s*ENVIRONMENT\s*\}\}/\$ENV{ENVIRONMENT}/g" "$INDEX_FILE"
-          perl -i -0777 -pe "s/\{\{\s*RUN_NUMBER\s*\}\}/\$ENV{RUN_NUMBER}/g" "$INDEX_FILE"
-          perl -i -0777 -pe "s/\{\{\s*RUN_CONCLUSION\s*\}\}/\$ENV{RUN_CONCLUSION}/g" "$INDEX_FILE"
-          perl -i -0777 -pe "s/\{\{\s*COMMIT_SHA\s*\}\}/\$ENV{COMMIT_SHA}/g" "$INDEX_FILE"
-          perl -i -0777 -pe "s/\{\{\s*COMMIT_MESSAGE\s*\}\}/\$ENV{COMMIT_MESSAGE}/g" "$INDEX_FILE"
-          perl -i -0777 -pe "s/\{\{\s*COMMIT_AUTHOR\s*\}\}/\$ENV{COMMIT_AUTHOR}/g" "$INDEX_FILE"
-          perl -i -0777 -pe "s/\{\{\s*COMMIT_DATE\s*\}\}/\$ENV{COMMIT_DATE}/g" "$INDEX_FILE"
-          perl -i -0777 -pe "s/\{\{\s*DEPLOY_TIME\s*\}\}/\$ENV{DEPLOY_TIME}/g" "$INDEX_FILE"
+          envsubst < index.html > index.html
         env:
           COMMIT_MESSAGE: ${{ fromJson(steps.get_parent_commit_details.outputs.data).commit.message }}
           COMMIT_AUTHOR: ${{ fromJson(steps.get_parent_commit_details.outputs.data).commit.author.name }}
