@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Deployment Pipeline Status</title>
   <style>
     body { font-family: Arial, sans-serif; background-color: #f4f4f9; color: #333; margin: 0; padding: 20px; }
@@ -18,8 +17,10 @@
 <body>
   <div class="container">
     <h1>Deployment Pipeline Status</h1>
-    <p><strong>Tag:</strong> <span class="status">{{ TAG }}</span></p>
-    <p><strong>Environment:</strong> {{ ENVIRONMENT }}</p>
+    <!-- Display the desired message -->
+    <p>Tag <strong>{{ TAG }}</strong> deployed to <strong>{{ ENVIRONMENT }}</strong> environment</p>
+
+    <!-- Existing content -->
     <p><strong>Workflow Run Number:</strong> <span>{{ RUN_NUMBER }}</span></p>
     <p><strong>Run Status:</strong> <span class="status {{ RUN_CONCLUSION }}">{{ RUN_CONCLUSION }}</span></p>
 
