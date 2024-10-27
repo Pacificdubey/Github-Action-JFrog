@@ -18,21 +18,21 @@
   <div class="container">
     <h1>Deployment Pipeline Status</h1>
     <!-- Display the desired message -->
-    <p>Tag <strong>{{ TAG }}</strong> deployed to <strong>{{ ENVIRONMENT }}</strong> environment</p>
+    <p>Tag <strong>${TAG}</strong> deployed to <strong>${ENVIRONMENT}</strong> environment</p>
 
     <!-- Existing content -->
-    <p><strong>Workflow Run Number:</strong> <span>{{ RUN_NUMBER }}</span></p>
-    <p><strong>Run Status:</strong> <span class="status {{ RUN_CONCLUSION }}">{{ RUN_CONCLUSION }}</span></p>
+    <p><strong>Workflow Run Number:</strong> <span>${RUN_NUMBER}</span></p>
+    <p><strong>Run Status:</strong> <span class="status ${RUN_CONCLUSION}">${RUN_CONCLUSION}</span></p>
 
     <div class="detail">
       <h2>Commit Details</h2>
-      <p><strong>Commit SHA:</strong> {{ COMMIT_SHA }}</p>
-      <p><strong>Commit Message:</strong> {{ COMMIT_MESSAGE }}</p>
-      <p><strong>Author:</strong> {{ COMMIT_AUTHOR }}</p>
-      <p><strong>Date:</strong> <span class="timestamp">{{ COMMIT_DATE }}</span></p>
+      <p><strong>Commit SHA:</strong> ${COMMIT_SHA}</p>
+      <p><strong>Commit Message:</strong> ${COMMIT_MESSAGE}</p>
+      <p><strong>Author:</strong> ${COMMIT_AUTHOR}</p>
+      <p><strong>Date:</strong> <span class="timestamp">${COMMIT_DATE}</span></p>
     </div>
 
-    <p><strong>Deployment Time:</strong> <span class="timestamp">{{ DEPLOY_TIME }}</span></p>
+    <p><strong>Deployment Time:</strong> <span class="timestamp">${DEPLOY_TIME}</span></p>
   </div>
 </body>
 </html>
