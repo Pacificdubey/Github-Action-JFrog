@@ -16,6 +16,7 @@ permissions:
   id-token: write
 
 # Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
+# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
 concurrency:
   group: "pages"
   cancel-in-progress: false
@@ -71,7 +72,7 @@ jobs:
         id: get_workflow_runs
         uses: octokit/request-action@v2.x
         with:
-          route: GET /repos/${{ github.repository_owner }}/${{ github.event.repository_name }}/actions/runs?per_page=100
+          route: GET /repos/${{ github.repository_owner }}/${{ github.event.repository.name }}/actions/runs?per_page=100
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -106,9 +107,9 @@ jobs:
           RUN_NUMBER="${{ steps.find_workflow_run.outputs.run_number }}"
           RUN_CONCLUSION="${{ steps.find_workflow_run.outputs.conclusion }}"
           COMMIT_SHA="${{ steps.extract_parent_commit_sha.outputs.parent_commit_sha }}"
-          COMMIT_MESSAGE=$(echo '${{ steps.get_parent_commit_details.outputs.data }}' | jq -r '.commit.message')
-          COMMIT_AUTHOR=$(echo '${{ steps.get_parent_commit_details.outputs.data }}' | jq -r '.commit.author.name')
-          COMMIT_DATE=$(echo '${{ steps.get_parent_commit_details.outputs.data }}' | jq -r '.commit.author.date')
+          COMMIT_MESSAGE="${{ env.COMMIT_MESSAGE }}"
+          COMMIT_AUTHOR="${{ env.COMMIT_AUTHOR }}"
+          COMMIT_DATE="${{ env.COMMIT_DATE }}"
           DEPLOY_TIME="${{ steps.find_workflow_run.outputs.updated_at }}"
 
           # Debug: Print variable values
@@ -135,15 +136,20 @@ jobs:
           perl -i -0777 -pe "s/\{\{\s*COMMIT_AUTHOR\s*\}\}/\$ENV{COMMIT_AUTHOR}/g" "$INDEX_FILE"
           perl -i -0777 -pe "s/\{\{\s*COMMIT_DATE\s*\}\}/\$ENV{COMMIT_DATE}/g" "$INDEX_FILE"
           perl -i -0777 -pe "s/\{\{\s*DEPLOY_TIME\s*\}\}/\$ENV{DEPLOY_TIME}/g" "$INDEX_FILE"
+
+          # Debug: Output the modified index.html
+          echo "=== DEBUG: Modified index.html ==="
+          cat "$INDEX_FILE"
+          echo "=================================="
         env:
           TAG: "v1.3.1"
           ENVIRONMENT: ${{ steps.find_workflow_run.outputs.workflow_name }}
           RUN_NUMBER: ${{ steps.find_workflow_run.outputs.run_number }}
           RUN_CONCLUSION: ${{ steps.find_workflow_run.outputs.conclusion }}
           COMMIT_SHA: ${{ steps.extract_parent_commit_sha.outputs.parent_commit_sha }}
-          COMMIT_MESSAGE: ${{ steps.get_parent_commit_details.outputs.data | fromJson | get('commit').get('message') }}
-          COMMIT_AUTHOR: ${{ steps.get_parent_commit_details.outputs.data | fromJson | get('commit').get('author').get('name') }}
-          COMMIT_DATE: ${{ steps.get_parent_commit_details.outputs.data | fromJson | get('commit').get('author').get('date') }}
+          COMMIT_MESSAGE: ${{ fromJson(steps.get_parent_commit_details.outputs.data).commit.message }}
+          COMMIT_AUTHOR: ${{ fromJson(steps.get_parent_commit_details.outputs.data).commit.author.name }}
+          COMMIT_DATE: ${{ fromJson(steps.get_parent_commit_details.outputs.data).commit.author.date }}
           DEPLOY_TIME: ${{ steps.find_workflow_run.outputs.updated_at }}
 
       - name: Setup Pages
