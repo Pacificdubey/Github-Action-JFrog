@@ -93,7 +93,8 @@ jobs:
             CONCLUSION=$(echo "$WORKFLOW_RUN" | jq -r '.conclusion')
             WORKFLOW_NAME=$(echo "$WORKFLOW_RUN" | jq -r '.name')
             UPDATED_AT=$(echo "$WORKFLOW_RUN" | jq -r '.updated_at')
-            echo "run_number=$RUN_NUMBER" >> $GITHUB_OUTPUT
+            echo "RUN_NUMBER=$RUN_NUMBER" >> $GITHUB_ENV
+            #echo "run_number=$RUN_NUMBER" >> $GITHUB_OUTPUT
             echo "conclusion=$CONCLUSION" >> $GITHUB_OUTPUT
             echo "workflow_name=$WORKFLOW_NAME" >> $GITHUB_OUTPUT
             echo "updated_at=$UPDATED_AT" >> $GITHUB_OUTPUT
@@ -109,7 +110,7 @@ jobs:
           # Extract details
           TAG="${{ github.event.inputs.tag }}"
           ENVIRONMENT="${{ github.event.inputs.environment }}"
-          RUN_NUMBER="${{ steps.find_workflow_run.outputs.run_number }}"
+          #RUN_NUMBER="${{ steps.find_workflow_run.outputs.run_number }}"
           RUN_CONCLUSION="${{ steps.find_workflow_run.outputs.conclusion }}"
           COMMIT_SHA="${{ steps.extract_parent_commit_sha.outputs.parent_commit_sha }}"
           COMMIT_MESSAGE="${{ env.COMMIT_MESSAGE }}"
@@ -120,10 +121,11 @@ jobs:
           envsubst < index.html > index_final.html
           mv index_final.html index.html
         env:
+          TAG: ${{ github.event.inputs.tag }}
           COMMIT_MESSAGE: ${{ fromJson(steps.get_parent_commit_details.outputs.data).commit.message }}
           COMMIT_AUTHOR: ${{ fromJson(steps.get_parent_commit_details.outputs.data).commit.author.name }}
           COMMIT_DATE: ${{ fromJson(steps.get_parent_commit_details.outputs.data).commit.author.date }}
-          TAG: ${{ github.event.inputs.tag }}
+          
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
