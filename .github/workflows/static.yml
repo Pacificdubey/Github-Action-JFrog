@@ -110,9 +110,9 @@ jobs:
           RUN_NUMBER="${{ steps.find_workflow_run.outputs.run_number }}"
           RUN_CONCLUSION="${{ steps.find_workflow_run.outputs.conclusion }}"
           COMMIT_SHA="${{ steps.extract_parent_commit_sha.outputs.parent_commit_sha }}"
-          COMMIT_MESSAGE="${{ env.COMMIT_MESSAGE }}"
-          COMMIT_AUTHOR="${{ env.COMMIT_AUTHOR }}"
-          COMMIT_DATE="${{ env.COMMIT_DATE }}"
+          COMMIT_MESSAGE="${{ fromJson(steps.get_parent_commit_details.outputs.data).commit.message }}"
+          COMMIT_AUTHOR= "${{ fromJson(steps.get_parent_commit_details.outputs.data).commit.author.name }}"
+          COMMIT_DATE="${{ fromJson(steps.get_parent_commit_details.outputs.data).commit.author.date }}"
           DEPLOY_TIME="${{ steps.find_workflow_run.outputs.updated_at }}"
 
       - name: Setup Pages
