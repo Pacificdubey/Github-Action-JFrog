@@ -31,6 +31,89 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        
+      - name: Get Commit SHA from Tag
+        id: get_commit_sha
+        uses: octokit/request-action@v2.x
+        with:
+          route: GET /repos/{owner}/{repo}/git/ref/tags/{tag}
+          owner: ${{ github.repository_owner }}
+          repo: ${{ github.event.repository.name }}
+          tag: v1.3.1
+
+      - name: Extract Commit SHA
+        id: extract_commit_sha
+        run: |
+          COMMIT_SHA=$(echo '${{ steps.get_commit_sha.outputs.data }}' | jq -r '.object.sha')
+          echo "commit_sha=$COMMIT_SHA" >> $GITHUB_OUTPUT
+
+      - name: Get Commit Details
+        id: get_commit_details
+        uses: octokit/request-action@v2.x
+        with:
+          route: GET /repos/{owner}/{repo}/commits/{commit_sha}
+          owner: ${{ github.repository_owner }}
+          repo: ${{ github.event.repository.name }}
+          commit_sha: ${{ steps.extract_commit_sha.outputs.commit_sha }}
+
+      - name: Get Workflow Runs
+        id: get_workflow_runs
+        uses: octokit/request-action@v2.x
+        with:
+          route: GET /repos/{owner}/{repo}/actions/runs
+          owner: ${{ github.repository_owner }}
+          repo: ${{ github.event.repository.name }}
+          per_page: 100
+
+      - name: Find Workflow Run for Commit
+        id: find_workflow_run
+        run: |
+          WORKFLOW_RUN=$(echo '${{ steps.get_workflow_runs.outputs.data }}' | jq -c '.workflow_runs[] | select(.head_sha=="${{ steps.extract_commit_sha.outputs.commit_sha }}")' | head -n 1)
+          if [ -z "$WORKFLOW_RUN" ]; then
+            echo "run_number=N/A" >> $GITHUB_OUTPUT
+            echo "conclusion=N/A" >> $GITHUB_OUTPUT
+            echo "workflow_name=N/A" >> $GITHUB_OUTPUT
+            echo "updated_at=N/A" >> $GITHUB_OUTPUT
+          else
+            RUN_NUMBER=$(echo "$WORKFLOW_RUN" | jq -r '.run_number')
+            CONCLUSION=$(echo "$WORKFLOW_RUN" | jq -r '.conclusion')
+            WORKFLOW_NAME=$(echo "$WORKFLOW_RUN" | jq -r '.name')
+            UPDATED_AT=$(echo "$WORKFLOW_RUN" | jq -r '.updated_at')
+            echo "run_number=$RUN_NUMBER" >> $GITHUB_OUTPUT
+            echo "conclusion=$CONCLUSION" >> $GITHUB_OUTPUT
+            echo "workflow_name=$WORKFLOW_NAME" >> $GITHUB_OUTPUT
+            echo "updated_at=$UPDATED_AT" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Generate Deployment Status HTML
+        run: |
+          # File paths
+          INDEX_FILE="index.html"  # Adjust the path if your index.html is in a different directory
+
+          # Extract details
+          TAG="v1.3.1"
+          ENVIRONMENT="${{ steps.find_workflow_run.outputs.workflow_name }}"
+          RUN_NUMBER="${{ steps.find_workflow_run.outputs.run_number }}"
+          RUN_CONCLUSION="${{ steps.find_workflow_run.outputs.conclusion }}"
+          COMMIT_SHA="${{ steps.extract_commit_sha.outputs.commit_sha }}"
+          COMMIT_MESSAGE=$(echo '${{ steps.get_commit_details.outputs.data }}' | jq -r '.commit.message')
+          COMMIT_AUTHOR=$(echo '${{ steps.get_commit_details.outputs.data }}' | jq -r '.commit.author.name')
+          COMMIT_DATE=$(echo '${{ steps.get_commit_details.outputs.data }}' | jq -r '.commit.author.date')
+          DEPLOY_TIME="${{ steps.find_workflow_run.outputs.updated_at }}"
+
+          # Escape special characters in COMMIT_MESSAGE
+          ESCAPED_COMMIT_MESSAGE=$(printf '%s\n' "$COMMIT_MESSAGE" | sed 's/[&/\]/\\&/g')
+
+          # Use sed to replace placeholders in index.html
+          sed -i "s/{{ *TAG *}}/$TAG/g" "$INDEX_FILE"
+          sed -i "s/{{ *ENVIRONMENT *}}/$ENVIRONMENT/g" "$INDEX_FILE"
+          sed -i "s/{{ *RUN_NUMBER *}}/$RUN_NUMBER/g" "$INDEX_FILE"
+          sed -i "s/{{ *RUN_CONCLUSION *}}/$RUN_CONCLUSION/g" "$INDEX_FILE"
+          sed -i "s/{{ *COMMIT_SHA *}}/$COMMIT_SHA/g" "$INDEX_FILE"
+          sed -i "s/{{ *COMMIT_MESSAGE *}}/$ESCAPED_COMMIT_MESSAGE/g" "$INDEX_FILE"
+          sed -i "s/{{ *COMMIT_AUTHOR *}}/$COMMIT_AUTHOR/g" "$INDEX_FILE"
+          sed -i "s/{{ *COMMIT_DATE *}}/$COMMIT_DATE/g" "$INDEX_FILE"
+          sed -i "s/{{ *DEPLOY_TIME *}}/$DEPLOY_TIME/g" "$INDEX_FILE"
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact
