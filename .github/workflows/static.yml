@@ -117,7 +117,8 @@ jobs:
           COMMIT_DATE="${{ env.COMMIT_DATE }}"
           DEPLOY_TIME="${{ steps.find_workflow_run.outputs.updated_at }}"
 
-          envsubst < index.html > index.html
+          envsubst < index.html > index_final.html
+          mv index_final.html index.html
         env:
           COMMIT_MESSAGE: ${{ fromJson(steps.get_parent_commit_details.outputs.data).commit.message }}
           COMMIT_AUTHOR: ${{ fromJson(steps.get_parent_commit_details.outputs.data).commit.author.name }}
