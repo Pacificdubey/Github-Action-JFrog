@@ -111,7 +111,7 @@ jobs:
           RUN_CONCLUSION="${{ steps.find_workflow_run.outputs.conclusion }}"
           COMMIT_SHA="${{ steps.extract_parent_commit_sha.outputs.parent_commit_sha }}"
           COMMIT_MESSAGE="${{ env.COMMIT_MESSAGE }}"
-          COMMIT_AUTHOR= "${{ env.COMMIT_AUTHOR }}"
+          COMMIT_AUTHOR="${{ env.COMMIT_AUTHOR }}"
           COMMIT_DATE="${{ env.COMMIT_DATE }}"
           DEPLOY_TIME="${{ steps.find_workflow_run.outputs.updated_at }}"
 
