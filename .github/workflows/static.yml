@@ -110,10 +110,25 @@ jobs:
           RUN_NUMBER="${{ steps.find_workflow_run.outputs.run_number }}"
           RUN_CONCLUSION="${{ steps.find_workflow_run.outputs.conclusion }}"
           COMMIT_SHA="${{ steps.extract_parent_commit_sha.outputs.parent_commit_sha }}"
-          COMMIT_MESSAGE="${{ fromJson(steps.get_parent_commit_details.outputs.data).commit.message }}"
-          COMMIT_AUTHOR= "${{ fromJson(steps.get_parent_commit_details.outputs.data).commit.author.name }}"
-          COMMIT_DATE="${{ fromJson(steps.get_parent_commit_details.outputs.data).commit.author.date }}"
+          COMMIT_MESSAGE="${{ env.COMMIT_MESSAGE }}"
+          COMMIT_AUTHOR= "${{ env.COMMIT_AUTHOR }}"
+          COMMIT_DATE="${{ env.COMMIT_DATE }}"
           DEPLOY_TIME="${{ steps.find_workflow_run.outputs.updated_at }}"
+
+          # Use perl to replace placeholders in index.html
+          perl -i -0777 -pe "s/\{\{\s*TAG\s*\}\}/\$ENV{TAG}/g" "$INDEX_FILE"
+          perl -i -0777 -pe "s/\{\{\s*ENVIRONMENT\s*\}\}/\$ENV{ENVIRONMENT}/g" "$INDEX_FILE"
+          perl -i -0777 -pe "s/\{\{\s*RUN_NUMBER\s*\}\}/\$ENV{RUN_NUMBER}/g" "$INDEX_FILE"
+          perl -i -0777 -pe "s/\{\{\s*RUN_CONCLUSION\s*\}\}/\$ENV{RUN_CONCLUSION}/g" "$INDEX_FILE"
+          perl -i -0777 -pe "s/\{\{\s*COMMIT_SHA\s*\}\}/\$ENV{COMMIT_SHA}/g" "$INDEX_FILE"
+          perl -i -0777 -pe "s/\{\{\s*COMMIT_MESSAGE\s*\}\}/\$ENV{COMMIT_MESSAGE}/g" "$INDEX_FILE"
+          perl -i -0777 -pe "s/\{\{\s*COMMIT_AUTHOR\s*\}\}/\$ENV{COMMIT_AUTHOR}/g" "$INDEX_FILE"
+          perl -i -0777 -pe "s/\{\{\s*COMMIT_DATE\s*\}\}/\$ENV{COMMIT_DATE}/g" "$INDEX_FILE"
+          perl -i -0777 -pe "s/\{\{\s*DEPLOY_TIME\s*\}\}/\$ENV{DEPLOY_TIME}/g" "$INDEX_FILE"
+        env:
+          COMMIT_MESSAGE: ${{ fromJson(steps.get_parent_commit_details.outputs.data).commit.message }}
+          COMMIT_AUTHOR: ${{ fromJson(steps.get_parent_commit_details.outputs.data).commit.author.name }}
+          COMMIT_DATE: ${{ fromJson(steps.get_parent_commit_details.outputs.data).commit.author.date }}
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
