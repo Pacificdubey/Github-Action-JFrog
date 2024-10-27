@@ -36,10 +36,9 @@ jobs:
         id: get_commit_sha
         uses: octokit/request-action@v2.x
         with:
-          route: GET /repos/{owner}/{repo}/git/ref/tags/{tag}
-          owner: ${{ github.repository_owner }}
-          repo: ${{ github.event.repository.name }}
-          tag: v1.3.1
+          route: GET /repos/Pacificdubey/Github-Action-JFrog/git/ref/tags/v1.3.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Extract Commit SHA
         id: extract_commit_sha
@@ -51,19 +50,17 @@ jobs:
         id: get_commit_details
         uses: octokit/request-action@v2.x
         with:
-          route: GET /repos/{owner}/{repo}/commits/{commit_sha}
-          owner: ${{ github.repository_owner }}
-          repo: ${{ github.event.repository.name }}
-          commit_sha: ${{ steps.extract_commit_sha.outputs.commit_sha }}
+          route: GET /repos/${{ github.repository_owner }}/${{ github.event.repository.name }}/commits/${{ steps.extract_commit_sha.outputs.commit_sha }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Get Workflow Runs
         id: get_workflow_runs
         uses: octokit/request-action@v2.x
         with:
-          route: GET /repos/{owner}/{repo}/actions/runs
-          owner: ${{ github.repository_owner }}
-          repo: ${{ github.event.repository.name }}
-          per_page: 100
+          route: GET /repos/${{ github.repository_owner }}/${{ github.event.repository.name }}/actions/runs?per_page=100
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Find Workflow Run for Commit
         id: find_workflow_run
