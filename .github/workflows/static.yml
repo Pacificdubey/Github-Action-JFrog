@@ -31,7 +31,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        
+
       - name: Get Commit SHA from Tag
         id: get_commit_sha
         uses: octokit/request-action@v2.x
@@ -98,6 +98,20 @@ jobs:
           COMMIT_DATE=$(echo '${{ steps.get_commit_details.outputs.data }}' | jq -r '.commit.author.date')
           DEPLOY_TIME="${{ steps.find_workflow_run.outputs.updated_at }}"
 
+          # Debug: Print variable values
+          echo "=== DEBUG: Variable Values ==="
+          echo "TAG: $TAG"
+          echo "ENVIRONMENT: $ENVIRONMENT"
+          echo "RUN_NUMBER: $RUN_NUMBER"
+          echo "RUN_CONCLUSION: $RUN_CONCLUSION"
+          echo "COMMIT_SHA: $COMMIT_SHA"
+          echo "COMMIT_MESSAGE:"
+          echo "$COMMIT_MESSAGE"
+          echo "COMMIT_AUTHOR: $COMMIT_AUTHOR"
+          echo "COMMIT_DATE: $COMMIT_DATE"
+          echo "DEPLOY_TIME: $DEPLOY_TIME"
+          echo "=============================="
+
           # Escape special characters in COMMIT_MESSAGE
           ESCAPED_COMMIT_MESSAGE=$(printf '%s\n' "$COMMIT_MESSAGE" | sed 's/[&/\]/\\&/g')
 
@@ -111,13 +125,21 @@ jobs:
           sed -i "s/{{ *COMMIT_AUTHOR *}}/$COMMIT_AUTHOR/g" "$INDEX_FILE"
           sed -i "s/{{ *COMMIT_DATE *}}/$COMMIT_DATE/g" "$INDEX_FILE"
           sed -i "s/{{ *DEPLOY_TIME *}}/$DEPLOY_TIME/g" "$INDEX_FILE"
+
+          # Debug: Output the modified index.html
+          echo "=== DEBUG: Modified index.html ==="
+          cat "$INDEX_FILE"
+          echo "=================================="
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           # Upload entire repository
           path: '.'
+
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
