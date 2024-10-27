@@ -16,7 +16,6 @@ permissions:
   id-token: write
 
 # Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
-# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
 concurrency:
   group: "pages"
   cancel-in-progress: false
@@ -36,7 +35,7 @@ jobs:
         id: get_commit_sha
         uses: octokit/request-action@v2.x
         with:
-          route: GET /repos/Pacificdubey/Github-Action-JFrog/git/ref/tags/v1.3.1
+          route: GET /repos/${{ github.repository_owner }}/${{ github.event.repository.name }}/git/ref/tags/v1.3.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -50,7 +49,21 @@ jobs:
         id: get_commit_details
         uses: octokit/request-action@v2.x
         with:
-          route: GET /repos/${{ github.repository_owner }}/${{ github.event.repository.name }}/commits/${{ steps.extract_commit_sha.outputs.commit_sha }}
+          route: GET /repos/${{ github.repository_owner }}/${{ github.event.repository.name }}/git/commits/${{ steps.extract_commit_sha.outputs.commit_sha }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract Parent Commit SHA
+        id: extract_parent_commit_sha
+        run: |
+          PARENT_SHA=$(echo '${{ steps.get_commit_details.outputs.data }}' | jq -r '.parents[0].sha')
+          echo "parent_commit_sha=$PARENT_SHA" >> $GITHUB_OUTPUT
+
+      - name: Get Parent Commit Details
+        id: get_parent_commit_details
+        uses: octokit/request-action@v2.x
+        with:
+          route: GET /repos/${{ github.repository_owner }}/${{ github.event.repository.name }}/commits/${{ steps.extract_parent_commit_sha.outputs.parent_commit_sha }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -58,14 +71,14 @@ jobs:
         id: get_workflow_runs
         uses: octokit/request-action@v2.x
         with:
-          route: GET /repos/${{ github.repository_owner }}/${{ github.event.repository.name }}/actions/runs?per_page=100
+          route: GET /repos/${{ github.repository_owner }}/${{ github.event.repository_name }}/actions/runs?per_page=100
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Find Workflow Run for Commit
+      - name: Find Workflow Run for Parent Commit
         id: find_workflow_run
         run: |
-          WORKFLOW_RUN=$(echo '${{ steps.get_workflow_runs.outputs.data }}' | jq -c '.workflow_runs[] | select(.head_sha=="${{ steps.extract_commit_sha.outputs.commit_sha }}")' | head -n 1)
+          WORKFLOW_RUN=$(echo '${{ steps.get_workflow_runs.outputs.data }}' | jq -c '.workflow_runs[] | select(.head_sha=="${{ steps.extract_parent_commit_sha.outputs.parent_commit_sha }}")' | head -n 1)
           if [ -z "$WORKFLOW_RUN" ]; then
             echo "run_number=N/A" >> $GITHUB_OUTPUT
             echo "conclusion=N/A" >> $GITHUB_OUTPUT
@@ -92,10 +105,10 @@ jobs:
           ENVIRONMENT="${{ steps.find_workflow_run.outputs.workflow_name }}"
           RUN_NUMBER="${{ steps.find_workflow_run.outputs.run_number }}"
           RUN_CONCLUSION="${{ steps.find_workflow_run.outputs.conclusion }}"
-          COMMIT_SHA="${{ steps.extract_commit_sha.outputs.commit_sha }}"
-          COMMIT_MESSAGE=$(echo '${{ steps.get_commit_details.outputs.data }}' | jq -r '.commit.message')
-          COMMIT_AUTHOR=$(echo '${{ steps.get_commit_details.outputs.data }}' | jq -r '.commit.author.name')
-          COMMIT_DATE=$(echo '${{ steps.get_commit_details.outputs.data }}' | jq -r '.commit.author.date')
+          COMMIT_SHA="${{ steps.extract_parent_commit_sha.outputs.parent_commit_sha }}"
+          COMMIT_MESSAGE=$(echo '${{ steps.get_parent_commit_details.outputs.data }}' | jq -r '.commit.message')
+          COMMIT_AUTHOR=$(echo '${{ steps.get_parent_commit_details.outputs.data }}' | jq -r '.commit.author.name')
+          COMMIT_DATE=$(echo '${{ steps.get_parent_commit_details.outputs.data }}' | jq -r '.commit.author.date')
           DEPLOY_TIME="${{ steps.find_workflow_run.outputs.updated_at }}"
 
           # Debug: Print variable values
@@ -112,24 +125,26 @@ jobs:
           echo "DEPLOY_TIME: $DEPLOY_TIME"
           echo "=============================="
 
-          # Escape special characters in COMMIT_MESSAGE
-          ESCAPED_COMMIT_MESSAGE=$(printf '%s\n' "$COMMIT_MESSAGE" | sed 's/[&/\]/\\&/g')
-
-          # Use sed to replace placeholders in index.html
-          sed -i "s/{{ *TAG *}}/$TAG/g" "$INDEX_FILE"
-          sed -i "s/{{ *ENVIRONMENT *}}/$ENVIRONMENT/g" "$INDEX_FILE"
-          sed -i "s/{{ *RUN_NUMBER *}}/$RUN_NUMBER/g" "$INDEX_FILE"
-          sed -i "s/{{ *RUN_CONCLUSION *}}/$RUN_CONCLUSION/g" "$INDEX_FILE"
-          sed -i "s/{{ *COMMIT_SHA *}}/$COMMIT_SHA/g" "$INDEX_FILE"
-          sed -i "s/{{ *COMMIT_MESSAGE *}}/$ESCAPED_COMMIT_MESSAGE/g" "$INDEX_FILE"
-          sed -i "s/{{ *COMMIT_AUTHOR *}}/$COMMIT_AUTHOR/g" "$INDEX_FILE"
-          sed -i "s/{{ *COMMIT_DATE *}}/$COMMIT_DATE/g" "$INDEX_FILE"
-          sed -i "s/{{ *DEPLOY_TIME *}}/$DEPLOY_TIME/g" "$INDEX_FILE"
-
-          # Debug: Output the modified index.html
-          echo "=== DEBUG: Modified index.html ==="
-          cat "$INDEX_FILE"
-          echo "=================================="
+          # Use perl to replace placeholders in index.html
+          perl -i -0777 -pe "s/\{\{\s*TAG\s*\}\}/\$ENV{TAG}/g" "$INDEX_FILE"
+          perl -i -0777 -pe "s/\{\{\s*ENVIRONMENT\s*\}\}/\$ENV{ENVIRONMENT}/g" "$INDEX_FILE"
+          perl -i -0777 -pe "s/\{\{\s*RUN_NUMBER\s*\}\}/\$ENV{RUN_NUMBER}/g" "$INDEX_FILE"
+          perl -i -0777 -pe "s/\{\{\s*RUN_CONCLUSION\s*\}\}/\$ENV{RUN_CONCLUSION}/g" "$INDEX_FILE"
+          perl -i -0777 -pe "s/\{\{\s*COMMIT_SHA\s*\}\}/\$ENV{COMMIT_SHA}/g" "$INDEX_FILE"
+          perl -i -0777 -pe "s/\{\{\s*COMMIT_MESSAGE\s*\}\}/\$ENV{COMMIT_MESSAGE}/g" "$INDEX_FILE"
+          perl -i -0777 -pe "s/\{\{\s*COMMIT_AUTHOR\s*\}\}/\$ENV{COMMIT_AUTHOR}/g" "$INDEX_FILE"
+          perl -i -0777 -pe "s/\{\{\s*COMMIT_DATE\s*\}\}/\$ENV{COMMIT_DATE}/g" "$INDEX_FILE"
+          perl -i -0777 -pe "s/\{\{\s*DEPLOY_TIME\s*\}\}/\$ENV{DEPLOY_TIME}/g" "$INDEX_FILE"
+        env:
+          TAG: "v1.3.1"
+          ENVIRONMENT: ${{ steps.find_workflow_run.outputs.workflow_name }}
+          RUN_NUMBER: ${{ steps.find_workflow_run.outputs.run_number }}
+          RUN_CONCLUSION: ${{ steps.find_workflow_run.outputs.conclusion }}
+          COMMIT_SHA: ${{ steps.extract_parent_commit_sha.outputs.parent_commit_sha }}
+          COMMIT_MESSAGE: ${{ steps.get_parent_commit_details.outputs.data | fromJson | get('commit').get('message') }}
+          COMMIT_AUTHOR: ${{ steps.get_parent_commit_details.outputs.data | fromJson | get('commit').get('author').get('name') }}
+          COMMIT_DATE: ${{ steps.get_parent_commit_details.outputs.data | fromJson | get('commit').get('author').get('date') }}
+          DEPLOY_TIME: ${{ steps.find_workflow_run.outputs.updated_at }}
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
