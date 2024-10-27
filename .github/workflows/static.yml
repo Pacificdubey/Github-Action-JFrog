@@ -123,6 +123,7 @@ jobs:
           COMMIT_MESSAGE: ${{ fromJson(steps.get_parent_commit_details.outputs.data).commit.message }}
           COMMIT_AUTHOR: ${{ fromJson(steps.get_parent_commit_details.outputs.data).commit.author.name }}
           COMMIT_DATE: ${{ fromJson(steps.get_parent_commit_details.outputs.data).commit.author.date }}
+          TAG: ${{ github.event.inputs.tag }}
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
