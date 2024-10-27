@@ -1,13 +1,16 @@
 # Simple workflow for deploying static content to GitHub Pages
 name: Deploy static content to Pages
-
 on:
-  # Runs on pushes targeting the default branch
-  push:
-    branches: ["feature/octo-kit-testing"]
-
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment name for deployment status'
+        required: true
+        default: 'Main Workflow'
+      tag:
+        description: 'Git tag to generate the deployment status for'
+        required: true
+        default: 'v1.0.0'
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
@@ -25,7 +28,7 @@ jobs:
   # Single deploy job since we're just deploying
   deploy:
     environment:
-      name: github-pages
+      name: ${{ github.event.inputs.environment }}
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
@@ -36,7 +39,7 @@ jobs:
         id: get_commit_sha
         uses: octokit/request-action@v2.x
         with:
-          route: GET /repos/${{ github.repository_owner }}/${{ github.event.repository.name }}/git/ref/tags/v1.3.1
+          route: GET /repos/${{ github.repository_owner }}/${{ github.event.repository.name }}/git/ref/tags/${{ github.event.inputs.tag }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -102,8 +105,8 @@ jobs:
           INDEX_FILE="index.html"  # Adjust the path if your index.html is in a different directory
 
           # Extract details
-          TAG="v1.3.1"
-          ENVIRONMENT="${{ steps.find_workflow_run.outputs.workflow_name }}"
+          TAG="${{ github.event.inputs.tag }}"
+          ENVIRONMENT="${{ github.event.inputs.environment }}"
           RUN_NUMBER="${{ steps.find_workflow_run.outputs.run_number }}"
           RUN_CONCLUSION="${{ steps.find_workflow_run.outputs.conclusion }}"
           COMMIT_SHA="${{ steps.extract_parent_commit_sha.outputs.parent_commit_sha }}"
