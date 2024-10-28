@@ -84,10 +84,10 @@ jobs:
         run: |
           WORKFLOW_RUN=$(echo '${{ steps.get_workflow_runs.outputs.data }}' | jq -c '.workflow_runs[] | select(.head_sha=="${{ steps.extract_parent_commit_sha.outputs.parent_commit_sha }}")' | head -n 1)
           if [ -z "$WORKFLOW_RUN" ]; then
-            echo "run_number=N/A" >> $GITHUB_OUTPUT
-            echo "conclusion=N/A" >> $GITHUB_OUTPUT
-            echo "workflow_name=N/A" >> $GITHUB_OUTPUT
-            echo "updated_at=N/A" >> $GITHUB_OUTPUT
+            echo "RUN_NUMBER=N/A" >> $GITHUB_ENV
+            echo "CONCLUSION=N/A" >> $GITHUB_ENV
+            echo "WORKFLOW_NAME=N/A" >> $GITHUB_ENV
+            echo "UPDATED_AT=N/A" >> $GITHUB_ENV
           else
             RUN_NUMBER=$(echo "$WORKFLOW_RUN" | jq -r '.run_number')
             CONCLUSION=$(echo "$WORKFLOW_RUN" | jq -r '.conclusion')
@@ -95,9 +95,9 @@ jobs:
             UPDATED_AT=$(echo "$WORKFLOW_RUN" | jq -r '.updated_at')
             echo "RUN_NUMBER=$RUN_NUMBER" >> $GITHUB_ENV
             #echo "run_number=$RUN_NUMBER" >> $GITHUB_OUTPUT
-            echo "conclusion=$CONCLUSION" >> $GITHUB_OUTPUT
+            echo "RUN_CONCLUSION=$CONCLUSION" >> $GITHUB_ENV
             echo "workflow_name=$WORKFLOW_NAME" >> $GITHUB_OUTPUT
-            echo "updated_at=$UPDATED_AT" >> $GITHUB_OUTPUT
+            echo "DEPLOY_TIME=$UPDATED_AT" >> $GITHUB_ENV
           fi
       - name: Install gettext
         run: sudo apt-get update && sudo apt-get install -y gettext
@@ -108,23 +108,25 @@ jobs:
           INDEX_FILE="index.html"  # Adjust the path if your index.html is in a different directory
 
           # Extract details
-          TAG="${{ github.event.inputs.tag }}"
-          ENVIRONMENT="${{ github.event.inputs.environment }}"
+          #TAG="${{ github.event.inputs.tag }}"
+          #ENVIRONMENT="${{ env.ENVIRONMENT }}"
           #RUN_NUMBER="${{ steps.find_workflow_run.outputs.run_number }}"
-          RUN_CONCLUSION="${{ steps.find_workflow_run.outputs.conclusion }}"
-          COMMIT_SHA="${{ steps.extract_parent_commit_sha.outputs.parent_commit_sha }}"
-          COMMIT_MESSAGE="${{ env.COMMIT_MESSAGE }}"
-          COMMIT_AUTHOR="${{ env.COMMIT_AUTHOR }}"
-          COMMIT_DATE="${{ env.COMMIT_DATE }}"
-          DEPLOY_TIME="${{ steps.find_workflow_run.outputs.updated_at }}"
+          #RUN_CONCLUSION="${{ steps.find_workflow_run.outputs.conclusion }}"
+          #COMMIT_SHA="${{ steps.extract_parent_commit_sha.outputs.parent_commit_sha }}"
+          #COMMIT_MESSAGE="${{ env.COMMIT_MESSAGE }}"
+          #COMMIT_AUTHOR="${{ env.COMMIT_AUTHOR }}"
+          #COMMIT_DATE="${{ env.COMMIT_DATE }}"
+          #DEPLOY_TIME="${{ steps.find_workflow_run.outputs.updated_at }}"
 
           envsubst < index.html > index_final.html
           mv index_final.html index.html
         env:
           TAG: ${{ github.event.inputs.tag }}
+          COMMIT_SHA: ${{ steps.extract_parent_commit_sha.outputs.parent_commit_sha }}
           COMMIT_MESSAGE: ${{ fromJson(steps.get_parent_commit_details.outputs.data).commit.message }}
           COMMIT_AUTHOR: ${{ fromJson(steps.get_parent_commit_details.outputs.data).commit.author.name }}
           COMMIT_DATE: ${{ fromJson(steps.get_parent_commit_details.outputs.data).commit.author.date }}
+          ENVIRONMENT: ${{ github.event.inputs.environment }}
           
 
       - name: Setup Pages
