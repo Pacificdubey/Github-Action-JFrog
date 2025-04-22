@@ -1,0 +1,31 @@
+name: Deploy Workflow
+
+on:
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: "Pull Request Number"
+        required: true
+        type: string
+      comment_author:
+        description: "Comment Author"
+        required: true
+        type: string
+      environment:
+        description: "Environment name"
+        required: true
+        type: string
+
+jobs:
+  deploy:
+    name: Deploy to ${{ inputs.environment }}
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    steps:
+      - name: Checkout PR Code
+        uses: actions/checkout@v4
+
+      - name: Deploy Application
+        run: |
+          echo "Deploying PR #${{ inputs.pr_number }} to environment: ${{ inputs.environment }}"
+          # Your actual deploy script goes here
